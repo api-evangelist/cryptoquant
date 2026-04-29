@@ -1,0 +1,46 @@
+extends: [[spectral:oas, all]]
+rules:
+  cryptoquant-server-https:
+    description: CryptoQuant servers must use HTTPS.
+    given: $.servers[*].url
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https://'
+  cryptoquant-versioned-path:
+    description: CryptoQuant base URL should include /v{n} path version.
+    given: $.servers[*].url
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: '/v[0-9]+'
+  cryptoquant-bearer-auth:
+    description: CryptoQuant API must declare bearer auth scheme.
+    given: $.components.securitySchemes
+    severity: error
+    then:
+      function: truthy
+  cryptoquant-window-param:
+    description: Time-series operations should accept a window parameter.
+    given: $.paths[*][get].parameters[?(@.name=='window')]
+    severity: warn
+    then:
+      field: schema.enum
+      function: truthy
+  cryptoquant-tag-required:
+    description: Operations must declare a tag.
+    given: $.paths[*][get,post,put,delete]
+    severity: warn
+    then:
+      field: tags
+      function: truthy
+  cryptoquant-operation-id-camel:
+    description: Operation IDs should be camelCase.
+    given: $.paths[*][get,post,put,delete].operationId
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[a-z][a-zA-Z0-9]+$'

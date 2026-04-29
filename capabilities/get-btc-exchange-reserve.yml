@@ -1,0 +1,28 @@
+name: get-btc-exchange-reserve
+description: >-
+  Fetch a time-series of Bitcoin reserves held in exchange wallets, optionally
+  filtered to a specific exchange and a date range, at a chosen resolution.
+api: cryptoquant
+operationId: getBtcExchangeReserve
+method: GET
+path: /btc/exchange-flows/reserve
+inputs:
+  - name: window
+    in: query
+    required: false
+    description: Resolution (min, hour, day, block).
+  - name: from
+    in: query
+    required: false
+  - name: to
+    in: query
+    required: false
+  - name: exchange
+    in: query
+    required: false
+    description: Exchange name (binance, coinbase, all_exchange, etc.).
+outputs:
+  - name: data
+    description: Time-series of BTC exchange reserve values.
+sideEffects: read-only
+authentication: bearer

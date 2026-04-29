@@ -1,42 +1,58 @@
 # CryptoQuant (cryptoquant)
-CryptoQuant is a leading blockchain data analytics platform that provides real-time and historical data on various cryptocurrency markets. The platform offers insights into trading trends, market sentiment, and blockchain activity for a wide range of cryptocurrencies. Through its advanced tools and analytics, CryptoQuant helps investors, traders, and researchers make informed decisions in the rapidly evolving world of digital assets. Additionally, CryptoQuant offers market surveillance services to detect anomalies and suspicious activities in the cryptocurrency space, making it a valuable resource for ensuring transparency and security in the industry.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/cryptoquant/refs/heads/main/apis.yml)
+CryptoQuant is a blockchain data analytics platform providing real-time and historical on-chain, exchange flow, miner, derivatives, and stablecoin metrics for Bitcoin, Ethereum, and other major cryptocurrencies. The CryptoQuant API delivers time-series data used by traders, funds, and researchers to gauge market sentiment and capital flows.
+
+**APIs.yml URL:** https://raw.githubusercontent.com/api-evangelist/cryptoquant/refs/heads/main/apis.yml
 
 ## Scope
 
-- **Type:** Index 
-- **Position:** Consumer 
-- **Access:** 3rd-Party 
+- **Type:** Index
+- **Position:** Consumer
+- **Access:** 3rd-Party
+- **x-type:** company
 
-## Tags:
+## Tags
 
- - Blockchain, Cryptocurrency
-
-## Timestamps
-
-- **Created:** 2025-02-12 
-- **Modified:** 2025-03-01 
+Blockchain, Cryptocurrency, On-Chain Analytics, Market Data, Derivatives
 
 ## APIs
 
-### CryptoQuant
-CryptoQuant is a platform that provides real-time data and analysis on cryptocurrency markets. They offer a range of tools and features to help traders and investors make informed decisions, including market sentiment indicators, on-chain analysis, and exchange flow data. By tracking blockchain activity and monitoring the flow of cryptocurrencies across different platforms, CryptoQuant helps users understand market trends and anticipate price movements. Their platform is designed to give users a competitive edge in the fast-paced world of cryptocurrency trading. With reliable data and insights, CryptoQuant empowers users to navigate the volatile and rapidly changing landscape of digital assets with confidence.
+### CryptoQuant API
 
-**Human URL:** [ https://cryptoquant.com/docs]( https://cryptoquant.com/docs)
+The CryptoQuant API exposes on-chain, exchange flow, market, miner, and stablecoin metrics for major cryptocurrencies via a versioned REST interface.
 
+- Base URL: https://api.cryptoquant.com/v1
+- Documentation: https://cryptoquant.com/docs
+- Authentication: API key as bearer token
+- OpenAPI: [openapi/cryptoquant-openapi.yml](openapi/cryptoquant-openapi.yml)
 
-#### Tags:
+## Features
 
- - Blockchain, Cryptocurrency
+- Exchange flow metrics (inflow, outflow, reserve) per exchange
+- Miner flow metrics for Bitcoin mining pools
+- Network indicators (SOPR, MVRV, NVT)
+- Market and derivatives data (OHLCV, open interest)
+- Stablecoin reserve and supply metrics
+- Multiple time-series resolutions (min, hour, day, block)
+- API key authentication via bearer token
 
-#### Properties
+## Use Cases
 
-- [Documentation]( https://cryptoquant.com/docs)
+- Trading signals for quantitative crypto strategies
+- Risk management and exchange-reserve monitoring
+- Miner behavior research and supply forecasting
+- Macro crypto research and reporting
+- Compliance and market surveillance
+
+## Artifacts
+
+- OpenAPI: [openapi/cryptoquant-openapi.yml](openapi/cryptoquant-openapi.yml)
+- JSON Schema: [json-schema/cryptoquant-timeseries-schema.json](json-schema/cryptoquant-timeseries-schema.json)
+- JSON-LD Context: [json-ld/cryptoquant-context.jsonld](json-ld/cryptoquant-context.jsonld)
+- Vocabulary: [vocabulary/cryptoquant-vocabulary.yml](vocabulary/cryptoquant-vocabulary.yml)
+- Spectral Rules: [rules/cryptoquant-rules.yml](rules/cryptoquant-rules.yml)
+- Naftiko Capabilities: [capabilities/](capabilities/)
 
 ## Maintainers
 
-**FN:** Kin Lane
-
-**Email:** info@apievangelist.com
-
+- Kin Lane (kin@apievangelist.com)

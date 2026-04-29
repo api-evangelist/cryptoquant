@@ -1,0 +1,30 @@
+name: get-stablecoin-exchange-reserve
+description: >-
+  Fetch a time-series of stablecoin exchange reserves filtered by symbol
+  (USDT, USDC, etc.) and exchange.
+api: cryptoquant
+operationId: getStablecoinExchangeReserve
+method: GET
+path: /stablecoin/exchange-flows/reserve
+inputs:
+  - name: symbol
+    in: query
+    required: false
+    description: Stablecoin symbol (usdt, usdc, dai, busd).
+  - name: window
+    in: query
+    required: false
+  - name: from
+    in: query
+    required: false
+  - name: to
+    in: query
+    required: false
+  - name: exchange
+    in: query
+    required: false
+outputs:
+  - name: data
+    description: Time-series of stablecoin reserve values.
+sideEffects: read-only
+authentication: bearer

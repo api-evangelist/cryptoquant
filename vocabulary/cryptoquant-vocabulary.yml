@@ -1,0 +1,29 @@
+name: CryptoQuant Vocabulary
+description: >-
+  Controlled terms used across the CryptoQuant API for on-chain, exchange
+  flow, market, miner, and stablecoin metrics.
+terms:
+  - term: ExchangeFlow
+    definition: BTC/ETH/stablecoin transfer activity into and out of exchange wallets.
+  - term: Inflow
+    definition: Volume of an asset transferred from external addresses into exchange addresses.
+  - term: Outflow
+    definition: Volume of an asset transferred from exchange addresses to external addresses.
+  - term: Reserve
+    definition: Cumulative balance of an asset held by exchange or miner addresses.
+  - term: MinerFlow
+    definition: BTC transfer activity in and out of identified mining pool wallets.
+  - term: SOPR
+    definition: Spent Output Profit Ratio - aggregate ratio of value sold to value paid for spent outputs.
+  - term: MVRV
+    definition: Market Value to Realized Value ratio - relative valuation indicator.
+  - term: NVT
+    definition: Network Value to Transactions ratio.
+  - term: OpenInterest
+    definition: Total notional value of open derivatives contracts on tracked exchanges.
+  - term: OHLCV
+    definition: Open, High, Low, Close, Volume aggregated price candles.
+  - term: Window
+    definition: Time-series resolution (min, hour, day, block).
+  - term: Stablecoin
+    definition: Asset class including USDT, USDC, DAI, BUSD whose supply and reserve metrics are tracked.

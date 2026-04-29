@@ -1,0 +1,23 @@
+name: get-btc-mvrv
+description: >-
+  Fetch a time-series of Bitcoin MVRV (Market Value to Realized Value) ratio,
+  used as a relative valuation indicator.
+api: cryptoquant
+operationId: getBtcMvrv
+method: GET
+path: /btc/network-indicator/mvrv
+inputs:
+  - name: window
+    in: query
+    required: false
+  - name: from
+    in: query
+    required: false
+  - name: to
+    in: query
+    required: false
+outputs:
+  - name: data
+    description: Time-series of MVRV values for Bitcoin.
+sideEffects: read-only
+authentication: bearer

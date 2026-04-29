@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cryptoquant/refs/heads/main/json-schema/cryptoquant-timeseries-schema.json",
+  "title": "CryptoQuantTimeSeriesResponse",
+  "description": "Standard CryptoQuant time-series API response envelope.",
+  "type": "object",
+  "required": ["status", "result"],
+  "properties": {
+    "status": {
+      "type": "object",
+      "required": ["code"],
+      "properties": {
+        "code": {"type": "integer"},
+        "message": {"type": "string"}
+      }
+    },
+    "result": {
+      "type": "object",
+      "required": ["window", "data"],
+      "properties": {
+        "window": {"type": "string", "enum": ["min", "hour", "day", "block"]},
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["date"],
+            "properties": {
+              "date": {"type": "string", "format": "date-time"},
+              "value": {"type": "number"},
+              "open": {"type": "number"},
+              "high": {"type": "number"},
+              "low": {"type": "number"},
+              "close": {"type": "number"},
+              "volume": {"type": "number"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

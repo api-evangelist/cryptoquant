@@ -1,0 +1,27 @@
+name: get-btc-miner-outflow
+description: >-
+  Fetch a time-series of Bitcoin miner outflow indicating the volume of BTC
+  moved out of identified mining pool wallets, optionally for a specific pool.
+api: cryptoquant
+operationId: getBtcMinerOutflow
+method: GET
+path: /btc/miner-flows/outflow
+inputs:
+  - name: window
+    in: query
+    required: false
+  - name: from
+    in: query
+    required: false
+  - name: to
+    in: query
+    required: false
+  - name: miner
+    in: query
+    required: false
+    description: Mining pool name or all_miner.
+outputs:
+  - name: data
+    description: Time-series of miner outflow values.
+sideEffects: read-only
+authentication: bearer
