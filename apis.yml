@@ -1,7 +1,7 @@
 aid: cryptoquant
 url: >-
   https://raw.githubusercontent.com/api-evangelist/cryptoquant/refs/heads/main/apis.yml
-x-type: company
+kind: company
 name: CryptoQuant
 description: >-
   CryptoQuant is a blockchain data analytics platform providing real-time and
