@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: CryptoQuant API — Market Data
+  description: 'CryptoQuant API — Market Data. 2 operations. Lead operation: Bitcoin open interest. Self-contained Naftiko
+    capability covering one Cryptoquant business surface.'
+  tags:
+  - Cryptoquant
+  - Market Data
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CRYPTOQUANT_API_KEY: CRYPTOQUANT_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cryptoquant-market-data
+    baseUri: https://api.cryptoquant.com/v1
+    description: CryptoQuant API — Market Data business capability. Self-contained, no shared references.
+    resources:
+    - name: btc-market-data-open-interest
+      path: /btc/market-data/open-interest
+      operations:
+      - name: getbtcopeninterest
+        method: GET
+        description: Bitcoin open interest
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: btc-market-data-price-ohlcv
+      path: /btc/market-data/price-ohlcv
+      operations:
+      - name: getbtcpriceohlcv
+        method: GET
+        description: Bitcoin OHLCV
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CRYPTOQUANT_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cryptoquant-market-data-rest
+    port: 8080
+    description: REST adapter for CryptoQuant API — Market Data. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/btc/market-data/open-interest
+      name: btc-market-data-open-interest
+      description: REST surface for btc-market-data-open-interest.
+      operations:
+      - method: GET
+        name: getbtcopeninterest
+        description: Bitcoin open interest
+        call: cryptoquant-market-data.getbtcopeninterest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/btc/market-data/price-ohlcv
+      name: btc-market-data-price-ohlcv
+      description: REST surface for btc-market-data-price-ohlcv.
+      operations:
+      - method: GET
+        name: getbtcpriceohlcv
+        description: Bitcoin OHLCV
+        call: cryptoquant-market-data.getbtcpriceohlcv
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cryptoquant-market-data-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for CryptoQuant API — Market Data. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: bitcoin-open-interest
+      description: Bitcoin open interest
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cryptoquant-market-data.getbtcopeninterest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: bitcoin-ohlcv
+      description: Bitcoin OHLCV
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cryptoquant-market-data.getbtcpriceohlcv
+      outputParameters:
+      - type: object
+        mapping: $.

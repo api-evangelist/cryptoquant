@@ -1,0 +1,78 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: CryptoQuant API — Stablecoins
+  description: 'CryptoQuant API — Stablecoins. 1 operations. Lead operation: Stablecoin exchange reserve. Self-contained Naftiko
+    capability covering one Cryptoquant business surface.'
+  tags:
+  - Cryptoquant
+  - Stablecoins
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CRYPTOQUANT_API_KEY: CRYPTOQUANT_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cryptoquant-stablecoins
+    baseUri: https://api.cryptoquant.com/v1
+    description: CryptoQuant API — Stablecoins business capability. Self-contained, no shared references.
+    resources:
+    - name: stablecoin-exchange-flows-reserve
+      path: /stablecoin/exchange-flows/reserve
+      operations:
+      - name: getstablecoinexchangereserve
+        method: GET
+        description: Stablecoin exchange reserve
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: symbol
+          in: query
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.CRYPTOQUANT_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cryptoquant-stablecoins-rest
+    port: 8080
+    description: REST adapter for CryptoQuant API — Stablecoins. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/stablecoin/exchange-flows/reserve
+      name: stablecoin-exchange-flows-reserve
+      description: REST surface for stablecoin-exchange-flows-reserve.
+      operations:
+      - method: GET
+        name: getstablecoinexchangereserve
+        description: Stablecoin exchange reserve
+        call: cryptoquant-stablecoins.getstablecoinexchangereserve
+        with:
+          symbol: rest.symbol
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cryptoquant-stablecoins-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for CryptoQuant API — Stablecoins. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: stablecoin-exchange-reserve
+      description: Stablecoin exchange reserve
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cryptoquant-stablecoins.getstablecoinexchangereserve
+      with:
+        symbol: tools.symbol
+      outputParameters:
+      - type: object
+        mapping: $.

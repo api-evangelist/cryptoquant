@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: CryptoQuant API — Miner
+  description: 'CryptoQuant API — Miner. 2 operations. Lead operation: Bitcoin miner outflow. Self-contained Naftiko capability
+    covering one Cryptoquant business surface.'
+  tags:
+  - Cryptoquant
+  - Miner
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CRYPTOQUANT_API_KEY: CRYPTOQUANT_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cryptoquant-miner
+    baseUri: https://api.cryptoquant.com/v1
+    description: CryptoQuant API — Miner business capability. Self-contained, no shared references.
+    resources:
+    - name: btc-miner-flows-outflow
+      path: /btc/miner-flows/outflow
+      operations:
+      - name: getbtcmineroutflow
+        method: GET
+        description: Bitcoin miner outflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: btc-miner-flows-reserve
+      path: /btc/miner-flows/reserve
+      operations:
+      - name: getbtcminerreserve
+        method: GET
+        description: Bitcoin miner reserve
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CRYPTOQUANT_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cryptoquant-miner-rest
+    port: 8080
+    description: REST adapter for CryptoQuant API — Miner. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/btc/miner-flows/outflow
+      name: btc-miner-flows-outflow
+      description: REST surface for btc-miner-flows-outflow.
+      operations:
+      - method: GET
+        name: getbtcmineroutflow
+        description: Bitcoin miner outflow
+        call: cryptoquant-miner.getbtcmineroutflow
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/btc/miner-flows/reserve
+      name: btc-miner-flows-reserve
+      description: REST surface for btc-miner-flows-reserve.
+      operations:
+      - method: GET
+        name: getbtcminerreserve
+        description: Bitcoin miner reserve
+        call: cryptoquant-miner.getbtcminerreserve
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cryptoquant-miner-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for CryptoQuant API — Miner. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: bitcoin-miner-outflow
+      description: Bitcoin miner outflow
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cryptoquant-miner.getbtcmineroutflow
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: bitcoin-miner-reserve
+      description: Bitcoin miner reserve
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cryptoquant-miner.getbtcminerreserve
+      outputParameters:
+      - type: object
+        mapping: $.
