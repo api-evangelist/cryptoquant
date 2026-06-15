@@ -1,0 +1,487 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CryptoQuant API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exchange Flows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bitcoin exchange inflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/exchange-flows/inflow",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Total BTC transferred from external addresses into exchange wallets."
+        },
+        {
+          "info": {
+            "name": "Bitcoin exchange outflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/exchange-flows/outflow",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Bitcoin exchange outflow"
+        },
+        {
+          "info": {
+            "name": "Bitcoin exchange reserve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/exchange-flows/reserve",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Cumulative BTC balance held in exchange wallets."
+        },
+        {
+          "info": {
+            "name": "Ethereum exchange inflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/eth/exchange-flows/inflow",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Ethereum exchange inflow"
+        },
+        {
+          "info": {
+            "name": "Ethereum exchange reserve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/eth/exchange-flows/reserve",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Ethereum exchange reserve"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Market Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bitcoin OHLCV",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              }
+            ]
+          },
+          "docs": "Bitcoin OHLCV"
+        },
+        {
+          "info": {
+            "name": "Bitcoin open interest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/market-data/open-interest",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Bitcoin open interest"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "On-Chain",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bitcoin SOPR",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/network-indicator/sopr",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              }
+            ]
+          },
+          "docs": "Spent Output Profit Ratio."
+        },
+        {
+          "info": {
+            "name": "Bitcoin MVRV",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/network-indicator/mvrv",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              }
+            ]
+          },
+          "docs": "Market Value to Realized Value ratio."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Miner",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bitcoin miner reserve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/miner-flows/reserve",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "miner",
+                "value": "",
+                "type": "query",
+                "description": "Mining pool name or all_miner."
+              }
+            ]
+          },
+          "docs": "Bitcoin miner reserve"
+        },
+        {
+          "info": {
+            "name": "Bitcoin miner outflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/miner-flows/outflow",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "miner",
+                "value": "",
+                "type": "query",
+                "description": "Mining pool name or all_miner."
+              }
+            ]
+          },
+          "docs": "Bitcoin miner outflow"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Stablecoins",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stablecoin exchange reserve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/stablecoin/exchange-flows/reserve",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              },
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Stablecoin exchange reserve"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
