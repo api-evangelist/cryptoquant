@@ -6,7 +6,7 @@ description: >-
   CryptoQuant is a blockchain data analytics platform providing real-time and historical on-chain, exchange flow, miner,
   derivatives, and stablecoin metrics for Bitcoin, Ethereum, and other major cryptocurrencies. The API delivers
   time-series data used by traders, funds, and researchers to gauge market sentiment and capital flows.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Blockchain
   - Cryptocurrency
