@@ -71,6 +71,10 @@ useCases:
   - name: Compliance and Surveillance
     description: Surveillance teams detect anomalies and suspicious flow patterns across exchanges.
 common:
+  - type: DomainSecurity
+    url: security/cryptoquant-domain-security.yml
+  - type: Authentication
+    url: authentication/cryptoquant-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/crypto-quant
   - url: https://cryptoquant.com/
