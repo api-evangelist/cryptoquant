@@ -71,6 +71,8 @@ useCases:
   - name: Compliance and Surveillance
     description: Surveillance teams detect anomalies and suspicious flow patterns across exchanges.
 common:
+  - type: AgenticAccess
+    url: agentic-access/cryptoquant-agentic-access.yml
   - type: DomainSecurity
     url: security/cryptoquant-domain-security.yml
   - type: Authentication

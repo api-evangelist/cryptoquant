@@ -1,0 +1,134 @@
+generated: '2026-07-15'
+method: generated
+source: openapi/cryptoquant-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 12
+  by_action_class:
+    connected: 12
+  by_consequence:
+    read: 12
+  human_in_the_loop_required: 0
+operations:
+- path: /btc/exchange-flows/inflow
+  method: get
+  operationId: getBtcExchangeInflow
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/exchange-flows/outflow
+  method: get
+  operationId: getBtcExchangeOutflow
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/exchange-flows/reserve
+  method: get
+  operationId: getBtcExchangeReserve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/market-data/price-ohlcv
+  method: get
+  operationId: getBtcPriceOhlcv
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/market-data/open-interest
+  method: get
+  operationId: getBtcOpenInterest
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/network-indicator/sopr
+  method: get
+  operationId: getBtcSopr
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/network-indicator/mvrv
+  method: get
+  operationId: getBtcMvrv
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/miner-flows/reserve
+  method: get
+  operationId: getBtcMinerReserve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /btc/miner-flows/outflow
+  method: get
+  operationId: getBtcMinerOutflow
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /eth/exchange-flows/inflow
+  method: get
+  operationId: getEthExchangeInflow
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /eth/exchange-flows/reserve
+  method: get
+  operationId: getEthExchangeReserve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /stablecoin/exchange-flows/reserve
+  method: get
+  operationId: getStablecoinExchangeReserve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
