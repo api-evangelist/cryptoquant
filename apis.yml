@@ -6,7 +6,20 @@ description: >-
   CryptoQuant is a blockchain data analytics platform providing real-time and historical on-chain, exchange flow, miner,
   derivatives, and stablecoin metrics for Bitcoin, Ethereum, and other major cryptocurrencies. The API delivers
   time-series data used by traders, funds, and researchers to gauge market sentiment and capital flows.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cryptoquant.png
 tags:
   - Blockchain
   - Cryptocurrency
@@ -20,30 +33,96 @@ specificationVersion: '0.19'
 created: '2025-02-12'
 modified: '2026-05-19'
 apis:
-  - aid: cryptoquant:cryptoquant-api
-    name: CryptoQuant API
-    description: >-
-      The CryptoQuant API exposes on-chain, exchange flow, market, miner, and stablecoin metrics for major
-      cryptocurrencies via a versioned REST interface. Authentication uses an API key passed as a bearer token.
-    humanURL: https://cryptoquant.com/docs
-    baseURL: https://api.cryptoquant.com/v1
-    tags:
-      - On-Chain Analytics
-      - Exchange Flows
-      - Miner Flows
-      - Market Data
-      - Stablecoins
-    properties:
-      - url: https://cryptoquant.com/docs
-        type: Documentation
-      - url: https://cryptoquant.com/products/api
-        type: Pricing
-      - url: openapi/cryptoquant-openapi.yml
-        type: OpenAPI
-      - url: json-schema/cryptoquant-timeseries-schema.json
-        type: JSONSchema
-      - url: json-ld/cryptoquant-context.jsonld
-        type: JSONLDContext
+- aid: cryptoquant:cryptoquant-exchange-flows-api
+  name: CryptoQuant Exchange Flows API
+  description: Inflow, outflow, and reserve metrics for major exchanges.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Exchange Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-exchange-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-market-data-api
+  name: CryptoQuant Market Data API
+  description: Price, open interest, and derivatives metrics.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-miner-api
+  name: CryptoQuant Miner API
+  description: Miner reserve, position index, and outflow metrics.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Miner
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-miner-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-on-chain-api
+  name: CryptoQuant On-Chain API
+  description: Network indicators including SOPR, MVRV, NVT, and active addresses.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - On-Chain
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-on-chain-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-stablecoins-api
+  name: CryptoQuant Stablecoins API
+  description: Stablecoin supply ratio and exchange metrics.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Stablecoins
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-stablecoins-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
 features:
   - name: Exchange Flows
     description: Inflow, outflow, and reserve metrics for major exchanges (Binance, Coinbase, Kraken, etc.).
