@@ -1,0 +1,326 @@
+openapi: 3.0.3
+info:
+  title: CryptoQuant API
+  description: >-
+    The CryptoQuant API delivers on-chain, market, exchange flow, and miner
+    metrics for Bitcoin, Ethereum, and other major cryptocurrencies. Endpoints
+    return time-series data covering exchange inflows/outflows, supply,
+    miner reserves, derivatives, network indicators, and stablecoin metrics.
+    Authentication uses API key in the Authorization header.
+  version: '1.0'
+  contact:
+    name: CryptoQuant
+    url: https://cryptoquant.com
+servers:
+  - url: https://api.cryptoquant.com/v1
+    description: CryptoQuant production API
+security:
+  - BearerAuth: []
+tags:
+  - name: Exchange Flows
+    description: Inflow, outflow, and reserve metrics for major exchanges.
+  - name: Market Data
+    description: Price, open interest, and derivatives metrics.
+  - name: On-Chain
+    description: Network indicators including SOPR, MVRV, NVT, and active addresses.
+  - name: Miner
+    description: Miner reserve, position index, and outflow metrics.
+  - name: Stablecoins
+    description: Stablecoin supply ratio and exchange metrics.
+paths:
+  /btc/exchange-flows/inflow:
+    get:
+      tags: [Exchange Flows]
+      summary: Bitcoin exchange inflow
+      description: Total BTC transferred from external addresses into exchange wallets.
+      operationId: getBtcExchangeInflow
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+      responses:
+        '200':
+          description: Time-series of BTC exchange inflow.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/exchange-flows/outflow:
+    get:
+      tags: [Exchange Flows]
+      summary: Bitcoin exchange outflow
+      operationId: getBtcExchangeOutflow
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+      responses:
+        '200':
+          description: Time-series of BTC exchange outflow.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/exchange-flows/reserve:
+    get:
+      tags: [Exchange Flows]
+      summary: Bitcoin exchange reserve
+      description: Cumulative BTC balance held in exchange wallets.
+      operationId: getBtcExchangeReserve
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+      responses:
+        '200':
+          description: Time-series of BTC exchange reserve.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/market-data/price-ohlcv:
+    get:
+      tags: [Market Data]
+      summary: Bitcoin OHLCV
+      operationId: getBtcPriceOhlcv
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+      responses:
+        '200':
+          description: OHLCV time-series for Bitcoin.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OhlcvResponse'
+  /btc/market-data/open-interest:
+    get:
+      tags: [Market Data]
+      summary: Bitcoin open interest
+      operationId: getBtcOpenInterest
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+      responses:
+        '200':
+          description: Open interest in derivatives markets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/network-indicator/sopr:
+    get:
+      tags: [On-Chain]
+      summary: Bitcoin SOPR
+      description: Spent Output Profit Ratio.
+      operationId: getBtcSopr
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+      responses:
+        '200':
+          description: Time-series of SOPR.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/network-indicator/mvrv:
+    get:
+      tags: [On-Chain]
+      summary: Bitcoin MVRV
+      description: Market Value to Realized Value ratio.
+      operationId: getBtcMvrv
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+      responses:
+        '200':
+          description: Time-series of MVRV.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/miner-flows/reserve:
+    get:
+      tags: [Miner]
+      summary: Bitcoin miner reserve
+      operationId: getBtcMinerReserve
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Miner'
+      responses:
+        '200':
+          description: Time-series of miner reserve balances.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /btc/miner-flows/outflow:
+    get:
+      tags: [Miner]
+      summary: Bitcoin miner outflow
+      operationId: getBtcMinerOutflow
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Miner'
+      responses:
+        '200':
+          description: Time-series of miner outflow.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /eth/exchange-flows/inflow:
+    get:
+      tags: [Exchange Flows]
+      summary: Ethereum exchange inflow
+      operationId: getEthExchangeInflow
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+      responses:
+        '200':
+          description: Time-series of ETH exchange inflow.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /eth/exchange-flows/reserve:
+    get:
+      tags: [Exchange Flows]
+      summary: Ethereum exchange reserve
+      operationId: getEthExchangeReserve
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+      responses:
+        '200':
+          description: Time-series of ETH exchange reserve.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+  /stablecoin/exchange-flows/reserve:
+    get:
+      tags: [Stablecoins]
+      summary: Stablecoin exchange reserve
+      operationId: getStablecoinExchangeReserve
+      parameters:
+        - $ref: '#/components/parameters/Window'
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Exchange'
+        - in: query
+          name: symbol
+          schema: {type: string, example: usdt}
+      responses:
+        '200':
+          description: Time-series of stablecoin exchange reserve.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: API key passed as bearer token in the Authorization header.
+  parameters:
+    Window:
+      in: query
+      name: window
+      description: Resolution of the time-series.
+      schema:
+        type: string
+        enum: [min, hour, day, block]
+        default: day
+    From:
+      in: query
+      name: from
+      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
+      schema: {type: string}
+    To:
+      in: query
+      name: to
+      description: Inclusive end timestamp.
+      schema: {type: string}
+    Exchange:
+      in: query
+      name: exchange
+      description: Exchange name (e.g. binance, coinbase, kraken, all_exchange).
+      schema: {type: string, default: all_exchange}
+    Miner:
+      in: query
+      name: miner
+      description: Mining pool name or all_miner.
+      schema: {type: string, default: all_miner}
+  schemas:
+    TimeSeriesPoint:
+      type: object
+      properties:
+        date: {type: string, format: date-time}
+        value: {type: number}
+    TimeSeriesResponse:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            code: {type: integer}
+            message: {type: string}
+        result:
+          type: object
+          properties:
+            window: {type: string}
+            data:
+              type: array
+              items: {$ref: '#/components/schemas/TimeSeriesPoint'}
+    OhlcvPoint:
+      type: object
+      properties:
+        date: {type: string, format: date-time}
+        open: {type: number}
+        high: {type: number}
+        low: {type: number}
+        close: {type: number}
+        volume: {type: number}
+    OhlcvResponse:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            code: {type: integer}
+            message: {type: string}
+        result:
+          type: object
+          properties:
+            window: {type: string}
+            data:
+              type: array
+              items: {$ref: '#/components/schemas/OhlcvPoint'}
+    Error:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            code: {type: integer}
+            message: {type: string}

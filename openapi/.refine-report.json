@@ -1,0 +1,22 @@
+{
+  "provider": "cryptoquant",
+  "sources": [
+    "cryptoquant-exchange-flows-api-openapi.yml",
+    "cryptoquant-market-data-api-openapi.yml",
+    "cryptoquant-miner-api-openapi.yml",
+    "cryptoquant-on-chain-api-openapi.yml",
+    "cryptoquant-stablecoins-api-openapi.yml"
+  ],
+  "outputs": [
+    "cryptoquant-exchange-flows-api-openapi.yml",
+    "cryptoquant-market-data-api-openapi.yml",
+    "cryptoquant-miner-api-openapi.yml",
+    "cryptoquant-on-chain-api-openapi.yml",
+    "cryptoquant-stablecoins-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
