@@ -167,7 +167,7 @@ common:
   - url: https://cryptoquant.com/products/api
     name: API Plans
     type: Pricing
-  - url: openapi/cryptoquant-openapi.yml
+  - url: openapi/_original/cryptoquant-openapi.yml
     type: OpenAPI
   - url: json-schema/cryptoquant-timeseries-schema.json
     type: JSONSchema
