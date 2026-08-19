@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CryptoQuant Exchange Flows Stablecoins API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stablecoins",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Stablecoin exchange reserve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/stablecoin/exchange-flows/reserve",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              },
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Stablecoin exchange reserve"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

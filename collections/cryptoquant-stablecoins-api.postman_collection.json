@@ -1,0 +1,171 @@
+{
+  "item": [
+    {
+      "id": "2a02e622-dce1-407f-b9fa-eaeb53355875",
+      "name": "Stablecoins",
+      "description": {
+        "content": "Stablecoin supply ratio and exchange metrics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f3d34724-0e1e-438d-9fe9-844fe9dbbd30",
+          "name": "Stablecoin exchange reserve",
+          "request": {
+            "name": "Stablecoin exchange reserve",
+            "description": {},
+            "url": {
+              "path": [
+                "stablecoin",
+                "exchange-flows",
+                "reserve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                },
+                {
+                  "disabled": false,
+                  "key": "symbol",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a1f4cb40-fa6e-4f7c-8692-61e0c2a5f16b",
+              "name": "Time-series of stablecoin exchange reserve.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "stablecoin",
+                    "exchange-flows",
+                    "reserve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    },
+                    {
+                      "key": "symbol",
+                      "value": "usdt"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 6319,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"2010-05-29T17:33:57.012Z\",\n        \"value\": 5713.699129505151\n      },\n      {\n        \"date\": \"1962-05-11T05:04:06.039Z\",\n        \"value\": 3818.417329945395\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cryptoquant.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c4c3b8ad-5de2-46c2-9cf1-df70279490bb",
+    "name": "CryptoQuant Exchange Flows Stablecoins API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The CryptoQuant API delivers on-chain, market, exchange flow, and miner metrics for Bitcoin, Ethereum, and other major cryptocurrencies. Endpoints return time-series data covering exchange inflows/outflows, supply, miner reserves, derivatives, network indicators, and stablecoin metrics. Authentication uses API key in the Authorization header.\n\nContact Support:\n Name: CryptoQuant",
+      "type": "text/plain"
+    }
+  }
+}

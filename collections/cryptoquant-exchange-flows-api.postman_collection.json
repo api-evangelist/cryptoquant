@@ -1,0 +1,652 @@
+{
+  "item": [
+    {
+      "id": "e578b81a-c87a-48d4-95ac-2c52e7769786",
+      "name": "Exchange Flows",
+      "description": {
+        "content": "Inflow, outflow, and reserve metrics for major exchanges.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a35ea0af-14f9-4297-a661-05c193a555d0",
+          "name": "Bitcoin exchange inflow",
+          "request": {
+            "name": "Bitcoin exchange inflow",
+            "description": {
+              "content": "Total BTC transferred from external addresses into exchange wallets.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "btc",
+                "exchange-flows",
+                "inflow"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ef234cea-d3cb-406b-98e3-26f26339ae32",
+              "name": "Time-series of BTC exchange inflow.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "exchange-flows",
+                    "inflow"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 1191,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"1986-12-14T07:57:22.202Z\",\n        \"value\": 5748.362681793768\n      },\n      {\n        \"date\": \"1989-04-01T07:35:44.808Z\",\n        \"value\": 5347.988115670033\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f9f2fe8-10f6-4fa9-9cad-0674109af172",
+          "name": "Bitcoin exchange outflow",
+          "request": {
+            "name": "Bitcoin exchange outflow",
+            "description": {},
+            "url": {
+              "path": [
+                "btc",
+                "exchange-flows",
+                "outflow"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6936b1f2-6d30-47ca-84bd-56b3b6735982",
+              "name": "Time-series of BTC exchange outflow.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "exchange-flows",
+                    "outflow"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 9297,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"2001-04-20T20:23:49.027Z\",\n        \"value\": 6713.694879497893\n      },\n      {\n        \"date\": \"2021-10-26T13:10:39.772Z\",\n        \"value\": 6338.246934913496\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f5cca694-001a-4099-ac21-c11c86a1c767",
+          "name": "Bitcoin exchange reserve",
+          "request": {
+            "name": "Bitcoin exchange reserve",
+            "description": {
+              "content": "Cumulative BTC balance held in exchange wallets.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "btc",
+                "exchange-flows",
+                "reserve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1e322e57-71f7-42ef-a601-860fc7723afd",
+              "name": "Time-series of BTC exchange reserve.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "exchange-flows",
+                    "reserve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 9297,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"2001-04-20T20:23:49.027Z\",\n        \"value\": 6713.694879497893\n      },\n      {\n        \"date\": \"2021-10-26T13:10:39.772Z\",\n        \"value\": 6338.246934913496\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "859ca3e4-c0db-4bf6-a87c-3ae2357cc3ed",
+          "name": "Ethereum exchange inflow",
+          "request": {
+            "name": "Ethereum exchange inflow",
+            "description": {},
+            "url": {
+              "path": [
+                "eth",
+                "exchange-flows",
+                "inflow"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a346e058-0ce5-4089-9f55-780da57e8a21",
+              "name": "Time-series of ETH exchange inflow.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "eth",
+                    "exchange-flows",
+                    "inflow"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 9297,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"2001-04-20T20:23:49.027Z\",\n        \"value\": 6713.694879497893\n      },\n      {\n        \"date\": \"2021-10-26T13:10:39.772Z\",\n        \"value\": 6338.246934913496\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "72eac8ec-4252-40b2-89d6-272d1941bc22",
+          "name": "Ethereum exchange reserve",
+          "request": {
+            "name": "Ethereum exchange reserve",
+            "description": {},
+            "url": {
+              "path": [
+                "eth",
+                "exchange-flows",
+                "reserve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f8e56c4c-931a-4419-877e-036f35769851",
+              "name": "Time-series of ETH exchange reserve.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "eth",
+                    "exchange-flows",
+                    "reserve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 9297,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"2001-04-20T20:23:49.027Z\",\n        \"value\": 6713.694879497893\n      },\n      {\n        \"date\": \"2021-10-26T13:10:39.772Z\",\n        \"value\": 6338.246934913496\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cryptoquant.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a156f95c-c1a8-4007-84d8-6dccd6ea1e83",
+    "name": "CryptoQuant Exchange Flows API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The CryptoQuant API delivers on-chain, market, exchange flow, and miner metrics for Bitcoin, Ethereum, and other major cryptocurrencies. Endpoints return time-series data covering exchange inflows/outflows, supply, miner reserves, derivatives, network indicators, and stablecoin metrics. Authentication uses API key in the Authorization header.\n\nContact Support:\n Name: CryptoQuant",
+      "type": "text/plain"
+    }
+  }
+}

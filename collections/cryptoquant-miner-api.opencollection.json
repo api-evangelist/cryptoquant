@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CryptoQuant Exchange Flows Miner API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Miner",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bitcoin miner reserve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/miner-flows/reserve",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "miner",
+                "value": "",
+                "type": "query",
+                "description": "Mining pool name or all_miner."
+              }
+            ]
+          },
+          "docs": "Bitcoin miner reserve"
+        },
+        {
+          "info": {
+            "name": "Bitcoin miner outflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/miner-flows/outflow",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "miner",
+                "value": "",
+                "type": "query",
+                "description": "Mining pool name or all_miner."
+              }
+            ]
+          },
+          "docs": "Bitcoin miner outflow"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

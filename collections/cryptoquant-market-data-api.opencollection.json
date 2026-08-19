@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CryptoQuant Exchange Flows Market Data API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Market Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bitcoin OHLCV",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              }
+            ]
+          },
+          "docs": "Bitcoin OHLCV"
+        },
+        {
+          "info": {
+            "name": "Bitcoin open interest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cryptoquant.com/v1/btc/market-data/open-interest",
+            "params": [
+              {
+                "name": "window",
+                "value": "",
+                "type": "query",
+                "description": "Resolution of the time-series."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive end timestamp."
+              },
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+              }
+            ]
+          },
+          "docs": "Bitcoin open interest"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

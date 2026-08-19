@@ -1,0 +1,269 @@
+{
+  "item": [
+    {
+      "id": "fc8f0759-6bf4-411a-a69d-4edf73ba76fa",
+      "name": "On-Chain",
+      "description": {
+        "content": "Network indicators including SOPR, MVRV, NVT, and active addresses.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "271e01c1-087d-4557-8f5d-9a588e5cd61f",
+          "name": "Bitcoin SOPR",
+          "request": {
+            "name": "Bitcoin SOPR",
+            "description": {
+              "content": "Spent Output Profit Ratio.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "btc",
+                "network-indicator",
+                "sopr"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b7094ceb-b51f-4c44-bfc6-60208235fbae",
+              "name": "Time-series of SOPR.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "network-indicator",
+                    "sopr"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 3869,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"1954-07-09T21:34:51.870Z\",\n        \"value\": 2998.596504629073\n      },\n      {\n        \"date\": \"2022-03-03T16:07:26.671Z\",\n        \"value\": 6136.562832391127\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a03ea878-07a5-4c20-8285-fb4bac3eae2f",
+          "name": "Bitcoin MVRV",
+          "request": {
+            "name": "Bitcoin MVRV",
+            "description": {
+              "content": "Market Value to Realized Value ratio.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "btc",
+                "network-indicator",
+                "mvrv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d673ae05-8400-43ba-8b9e-75787833f7f3",
+              "name": "Time-series of MVRV.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "network-indicator",
+                    "mvrv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 7088,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"1990-05-19T05:08:27.504Z\",\n        \"value\": 241.62252009181094\n      },\n      {\n        \"date\": \"1986-08-28T16:32:42.309Z\",\n        \"value\": 1964.4484295379327\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cryptoquant.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7d9bbbd9-c6e1-4471-9124-39d6bfbb9a45",
+    "name": "CryptoQuant Exchange Flows On-Chain API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The CryptoQuant API delivers on-chain, market, exchange flow, and miner metrics for Bitcoin, Ethereum, and other major cryptocurrencies. Endpoints return time-series data covering exchange inflows/outflows, supply, miner reserves, derivatives, network indicators, and stablecoin metrics. Authentication uses API key in the Authorization header.\n\nContact Support:\n Name: CryptoQuant",
+      "type": "text/plain"
+    }
+  }
+}

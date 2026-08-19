@@ -1,0 +1,273 @@
+{
+  "item": [
+    {
+      "id": "43d4b59d-3001-4650-af9e-425e3c822d54",
+      "name": "Market Data",
+      "description": {
+        "content": "Price, open interest, and derivatives metrics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "49df0bc4-3767-4554-94c1-d8f8610bfc5f",
+          "name": "Bitcoin OHLCV",
+          "request": {
+            "name": "Bitcoin OHLCV",
+            "description": {},
+            "url": {
+              "path": [
+                "btc",
+                "market-data",
+                "price-ohlcv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4d7476dd-9a64-47a4-8aac-99c89ac3de95",
+              "name": "OHLCV time-series for Bitcoin.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "market-data",
+                    "price-ohlcv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 8871,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"1981-08-17T22:32:35.948Z\",\n        \"open\": 2550.947126937637,\n        \"high\": 3258.047012288373,\n        \"low\": 160.00760978545637,\n        \"close\": 6464.695037332395,\n        \"volume\": 2205.9398876388714\n      },\n      {\n        \"date\": \"1977-02-11T12:58:49.448Z\",\n        \"open\": 9065.946000820864,\n        \"high\": 8874.344403654548,\n        \"low\": 4795.074421341785,\n        \"close\": 7708.526770219169,\n        \"volume\": 4586.7578526626085\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4a75b409-76ab-4f10-9daa-fe4b1d255526",
+          "name": "Bitcoin open interest",
+          "request": {
+            "name": "Bitcoin open interest",
+            "description": {},
+            "url": {
+              "path": [
+                "btc",
+                "market-data",
+                "open-interest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "window",
+                  "value": "day",
+                  "description": "Resolution of the time-series."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<string>",
+                  "description": "Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS)."
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<string>",
+                  "description": "Inclusive end timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchange",
+                  "value": "all_exchange",
+                  "description": "Exchange name (e.g. binance, coinbase, kraken, all_exchange)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d8926796-bf3d-4e16-bdcf-bf8daf244346",
+              "name": "Open interest in derivatives markets.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "btc",
+                    "market-data",
+                    "open-interest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "window",
+                      "value": "day"
+                    },
+                    {
+                      "key": "from",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "to",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exchange",
+                      "value": "all_exchange"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": {\n    \"code\": 5081,\n    \"message\": \"string\"\n  },\n  \"result\": {\n    \"window\": \"string\",\n    \"data\": [\n      {\n        \"date\": \"1958-10-03T12:59:14.022Z\",\n        \"value\": 3699.036932807057\n      },\n      {\n        \"date\": \"2005-03-24T11:19:13.012Z\",\n        \"value\": 5322.076127345812\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cryptoquant.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4bc72fd2-6b50-401d-8fd6-927da247fb18",
+    "name": "CryptoQuant Exchange Flows Market Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The CryptoQuant API delivers on-chain, market, exchange flow, and miner metrics for Bitcoin, Ethereum, and other major cryptocurrencies. Endpoints return time-series data covering exchange inflows/outflows, supply, miner reserves, derivatives, network indicators, and stablecoin metrics. Authentication uses API key in the Authorization header.\n\nContact Support:\n Name: CryptoQuant",
+      "type": "text/plain"
+    }
+  }
+}
