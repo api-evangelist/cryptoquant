@@ -105,7 +105,7 @@ apis:
   humanURL: https://cryptoquant.com/docs
   baseURL: https://api.cryptoquant.com/v1
   tags:
-  - On-Chain
+  - Onchain
   tags_raw:
   - On-Chain
   properties:
