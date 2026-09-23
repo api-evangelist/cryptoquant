@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: CryptoQuant Exchange Flows Miner API
+  title: CryptoQuant Miner API
   description: The CryptoQuant API delivers on-chain, market, exchange flow, and miner metrics for Bitcoin, Ethereum, and other major cryptocurrencies. Endpoints return time-series data covering exchange inflows/outflows, supply, miner reserves, derivatives, network indicators, and stablecoin metrics. Authentication uses API key in the Authorization header.
   version: '1.0'
   contact:
@@ -52,47 +52,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TimeSeriesResponse'
 components:
-  parameters:
-    Miner:
-      in: query
-      name: miner
-      description: Mining pool name or all_miner.
-      schema:
-        type: string
-        default: all_miner
-    To:
-      in: query
-      name: to
-      description: Inclusive end timestamp.
-      schema:
-        type: string
-    From:
-      in: query
-      name: from
-      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
-      schema:
-        type: string
-    Window:
-      in: query
-      name: window
-      description: Resolution of the time-series.
-      schema:
-        type: string
-        enum:
-        - min
-        - hour
-        - day
-        - block
-        default: day
   schemas:
-    TimeSeriesPoint:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        value:
-          type: number
     TimeSeriesResponse:
       type: object
       properties:
@@ -112,6 +72,46 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TimeSeriesPoint'
+    TimeSeriesPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        value:
+          type: number
+  parameters:
+    Window:
+      in: query
+      name: window
+      description: Resolution of the time-series.
+      schema:
+        type: string
+        enum:
+        - min
+        - hour
+        - day
+        - block
+        default: day
+    Miner:
+      in: query
+      name: miner
+      description: Mining pool name or all_miner.
+      schema:
+        type: string
+        default: all_miner
+    From:
+      in: query
+      name: from
+      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
+      schema:
+        type: string
+    To:
+      in: query
+      name: to
+      description: Inclusive end timestamp.
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http
