@@ -39,7 +39,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/TimeSeriesResponse'
 components:
+  parameters:
+    From:
+      in: query
+      name: from
+      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
+      schema:
+        type: string
+    Exchange:
+      in: query
+      name: exchange
+      description: Exchange name (e.g. binance, coinbase, kraken, all_exchange).
+      schema:
+        type: string
+        default: all_exchange
+    To:
+      in: query
+      name: to
+      description: Inclusive end timestamp.
+      schema:
+        type: string
+    Window:
+      in: query
+      name: window
+      description: Resolution of the time-series.
+      schema:
+        type: string
+        enum:
+        - min
+        - hour
+        - day
+        - block
+        default: day
   schemas:
+    TimeSeriesPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        value:
+          type: number
     TimeSeriesResponse:
       type: object
       properties:
@@ -59,46 +99,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TimeSeriesPoint'
-    TimeSeriesPoint:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        value:
-          type: number
-  parameters:
-    Window:
-      in: query
-      name: window
-      description: Resolution of the time-series.
-      schema:
-        type: string
-        enum:
-        - min
-        - hour
-        - day
-        - block
-        default: day
-    Exchange:
-      in: query
-      name: exchange
-      description: Exchange name (e.g. binance, coinbase, kraken, all_exchange).
-      schema:
-        type: string
-        default: all_exchange
-    From:
-      in: query
-      name: from
-      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
-      schema:
-        type: string
-    To:
-      in: query
-      name: to
-      description: Inclusive end timestamp.
-      schema:
-        type: string
   securitySchemes:
     BearerAuth:
       type: http
