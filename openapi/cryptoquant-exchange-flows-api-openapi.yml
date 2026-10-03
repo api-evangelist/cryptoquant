@@ -109,6 +109,12 @@ paths:
                 $ref: '#/components/schemas/TimeSeriesResponse'
 components:
   parameters:
+    To:
+      in: query
+      name: to
+      description: Inclusive end timestamp.
+      schema:
+        type: string
     From:
       in: query
       name: from
@@ -122,12 +128,6 @@ components:
       schema:
         type: string
         default: all_exchange
-    To:
-      in: query
-      name: to
-      description: Inclusive end timestamp.
-      schema:
-        type: string
     Window:
       in: query
       name: window

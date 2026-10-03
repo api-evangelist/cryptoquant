@@ -52,6 +52,12 @@ paths:
                 $ref: '#/components/schemas/TimeSeriesResponse'
 components:
   parameters:
+    To:
+      in: query
+      name: to
+      description: Inclusive end timestamp.
+      schema:
+        type: string
     From:
       in: query
       name: from
@@ -65,12 +71,6 @@ components:
       schema:
         type: string
         default: all_exchange
-    To:
-      in: query
-      name: to
-      description: Inclusive end timestamp.
-      schema:
-        type: string
     Window:
       in: query
       name: window
@@ -84,6 +84,25 @@ components:
         - block
         default: day
   schemas:
+    OhlcvResponse:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+        result:
+          type: object
+          properties:
+            window:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/OhlcvPoint'
     TimeSeriesPoint:
       type: object
       properties:
@@ -91,6 +110,22 @@ components:
           type: string
           format: date-time
         value:
+          type: number
+    OhlcvPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        open:
+          type: number
+        high:
+          type: number
+        low:
+          type: number
+        close:
+          type: number
+        volume:
           type: number
     TimeSeriesResponse:
       type: object
@@ -111,41 +146,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TimeSeriesPoint'
-    OhlcvResponse:
-      type: object
-      properties:
-        status:
-          type: object
-          properties:
-            code:
-              type: integer
-            message:
-              type: string
-        result:
-          type: object
-          properties:
-            window:
-              type: string
-            data:
-              type: array
-              items:
-                $ref: '#/components/schemas/OhlcvPoint'
-    OhlcvPoint:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        open:
-          type: number
-        high:
-          type: number
-        low:
-          type: number
-        close:
-          type: number
-        volume:
-          type: number
   securitySchemes:
     BearerAuth:
       type: http

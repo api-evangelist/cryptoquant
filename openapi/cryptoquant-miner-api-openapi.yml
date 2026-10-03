@@ -53,16 +53,16 @@ paths:
                 $ref: '#/components/schemas/TimeSeriesResponse'
 components:
   parameters:
-    From:
-      in: query
-      name: from
-      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
-      schema:
-        type: string
     To:
       in: query
       name: to
       description: Inclusive end timestamp.
+      schema:
+        type: string
+    From:
+      in: query
+      name: from
+      description: Inclusive start timestamp (RFC3339 or YYYYMMDDTHHMMSS).
       schema:
         type: string
     Miner:
