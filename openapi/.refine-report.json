@@ -1,28 +1,65 @@
 {
   "provider": "cryptoquant",
   "sources": [
-    "_original/cryptoquant-openapi.yml"
+    "_original/cryptoquant-openapi.json"
   ],
   "outputs": [
-    "cryptoquant-exchange-flows-api-openapi.yml",
-    "cryptoquant-market-data-api-openapi.yml",
-    "cryptoquant-miner-api-openapi.yml",
-    "cryptoquant-on-chain-api-openapi.yml",
-    "cryptoquant-stablecoins-api-openapi.yml"
+    "cryptoquant-alt-market-data-api-openapi.yml",
+    "cryptoquant-available-endpoints-api-openapi.yml",
+    "cryptoquant-btc-entity-status-api-openapi.yml",
+    "cryptoquant-btc-exchange-flows-api-openapi.yml",
+    "cryptoquant-btc-flow-indicator-api-openapi.yml",
+    "cryptoquant-btc-fund-data-api-openapi.yml",
+    "cryptoquant-btc-inter-entity-flows-api-openapi.yml",
+    "cryptoquant-btc-lightning-statistics-api-openapi.yml",
+    "cryptoquant-btc-market-data-api-openapi.yml",
+    "cryptoquant-btc-market-indicator-api-openapi.yml",
+    "cryptoquant-btc-mempool-statistics-api-openapi.yml",
+    "cryptoquant-btc-miner-data-api-openapi.yml",
+    "cryptoquant-btc-miner-flows-api-openapi.yml",
+    "cryptoquant-btc-network-data-api-openapi.yml",
+    "cryptoquant-btc-network-indicator-api-openapi.yml",
+    "cryptoquant-erc20-entity-status-api-openapi.yml",
+    "cryptoquant-erc20-exchange-flows-api-openapi.yml",
+    "cryptoquant-erc20-flow-indicator-api-openapi.yml",
+    "cryptoquant-erc20-market-data-api-openapi.yml",
+    "cryptoquant-erc20-network-data-api-openapi.yml",
+    "cryptoquant-eth-2-0-api-openapi.yml",
+    "cryptoquant-eth-entity-status-api-openapi.yml",
+    "cryptoquant-eth-exchange-flows-api-openapi.yml",
+    "cryptoquant-eth-flow-indicator-api-openapi.yml",
+    "cryptoquant-eth-fund-data-api-openapi.yml",
+    "cryptoquant-eth-market-data-api-openapi.yml",
+    "cryptoquant-eth-market-indicator-api-openapi.yml",
+    "cryptoquant-eth-network-data-api-openapi.yml",
+    "cryptoquant-latency-api-openapi.yml",
+    "cryptoquant-stablecoin-entity-status-api-openapi.yml",
+    "cryptoquant-stablecoin-exchange-flows-api-openapi.yml",
+    "cryptoquant-stablecoin-flow-indicator-api-openapi.yml",
+    "cryptoquant-stablecoin-market-data-api-openapi.yml",
+    "cryptoquant-stablecoin-network-data-api-openapi.yml",
+    "cryptoquant-trx-defi-api-openapi.yml",
+    "cryptoquant-trx-market-data-api-openapi.yml",
+    "cryptoquant-trx-network-data-api-openapi.yml",
+    "cryptoquant-xrp-amm-data-api-openapi.yml",
+    "cryptoquant-xrp-dex-data-api-openapi.yml",
+    "cryptoquant-xrp-entity-flows-api-openapi.yml",
+    "cryptoquant-xrp-entity-status-api-openapi.yml",
+    "cryptoquant-xrp-flow-indicator-api-openapi.yml",
+    "cryptoquant-xrp-market-data-api-openapi.yml",
+    "cryptoquant-xrp-network-data-api-openapi.yml",
+    "cryptoquant-xrp-network-indicator-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "cryptoquant-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "cryptoquant-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "cryptoquant-openapi.json: declared missing tag: ERC20 Network Data",
+    "cryptoquant-openapi.json: declared missing tag: TRX DEFI",
+    "cryptoquant-openapi.json: declared missing tag: XRP Entity Status",
+    "apis.yml register: written (+45 apis, 45 total)"
   ],
-  "skipped": [
-    "cryptoquant-exchange-flows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cryptoquant-market-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cryptoquant-miner-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cryptoquant-on-chain-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "cryptoquant-stablecoins-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

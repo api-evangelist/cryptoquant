@@ -1,0 +1,880 @@
+openapi: 3.2.0
+info:
+  version: 1.3.0
+  title: CryptoQuant Data Stablecoin Network Data API
+  termsOfService: https://cryptoquant.com/terms-of-service
+  contact:
+    name: API Support
+    email: contact@cryptoquant.com
+  description: The CryptoQuant Data API provides simple and powerful endpoints to get information on general transaction data and aggregate on-chain statistics straight from the blockchain. The API root endpoint URL is `https://api.cryptoquant.com/v1/`.
+servers:
+- url: https://api.cryptoquant.com/v1
+  description: Default server
+tags:
+- name: Stablecoin Network Data
+  description: 'This namespace contains endpoint to retrieve on-chain network data for stablecoins including token transfers, issuance, addresses, etc. The earliest data point of each token is listed as Contract Created Datetime. here
+
+    ### Stablecoin Issuing Mechanism
+
+    Each individual Stablecoin is created by an issuing company and each of these companies operates with a different issue mechanism.
+
+    There are many of these but the two most common are as follows.
+
+    #### Example 1
+
+    !Ussuing Methodology 1
+
+    Before providing clients with the granting address, the issuing company holds a treasury address. Through the contract, the tokens are minted and held in the treasury address. Once the client sends fiat currency, the clients tokens are moved from the treasury address to the client address and the tokens are listed as being issued.
+
+    Conversely, when redeeming tokens for fiat, the tokens are sent to the treasury address and redeemed. This won''t be reflected in the supply unless these tokens are burned using a contract by the issuing company. The circulating supply is calculated as tokens that have been issued to clients, ignoring the supply held in the issuing company wallets.
+
+    #### Example 2
+
+    !Ussuing Methodology 2
+
+    In this method, there is no separate treasury address. After confirming the deposit of fiat, tokens are minted from the contract address and delivered directly to the client address. Minting and issuance occur simultaneously. When clients redeem tokens, the burn and redemption also are simultaneous.
+
+    This means that with this method, total supply and circulating supply will be the same. There are various methods for Stablecoin issuance, and we calculated supply and locate significant transactions. based upon these types of factors. In the future, mint/issue/burn/redeem will be added our available metrics and will be defined as listed below.
+
+    #### Terminology
+
+    | Term | Definition |
+
+    |----------------|---------------|
+
+    | Mint | Mint is a creation of new tokens that add to the supply. When tokens are minted, the total supply will increase.|
+
+    | Issue | Issue is when tokens are delivered to clients after deposit of fiat has been confirmed. When tokens are issued, the circulating supply will increase.|
+
+    | Burn | Burn is a revocation of currently existing tokens that results in a decreased supply. The opposite of Mint.|
+
+    | Redeem | Redeem is an exchange of tokens for deposited fiat that results in a decrease in the circulating supply. The opposite of Issue.|'
+paths:
+  /stablecoin/network-data/supply:
+    get:
+      tags:
+      - Stablecoin Network Data
+      summary: Supply
+      description: 'This endpoint returns metrics related to token supply, i.e. the amount of tokens in existence. We currently provide six metrics. supply_total is the total amount of tokens in existence, and supply_circulating is an approximation of the amount of tokens that are circulating in the market(e.g. excluding tokens owned by the issuing company''s treasury address). supply_minted and supply_burned represents how many tokens were added/subtracted from supply_total. supply_issued and supply_redeemed represents how many tokens were added/subtracted from supply_circulating. For some tokens, mint and issue(or redeem and burn) occurs simultaneously, and for others this does not. For further information, please refer to the section ''Stablecoin Issuing Mechanism''.
+
+
+        **📖 Data Guide:** Stablecoin Network Data — definition, interpretation, and chart examples.'
+      operationId: getSupplySC
+      parameters:
+      - description: A Stablcoin token from the table that we support. [See here](#tag/Supported-Stablecoin-List)
+        explode: false
+        in: query
+        name: token
+        required: true
+        schema:
+          type: string
+        style: form
+        example: usdt_eth
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/stablecoin/network-data/supply?token=usdt_eth&window=day" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/stablecoin/network-data/supply?token=usdt_eth&window=day\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/stablecoin/network-data/supply?token=usdt_eth&window=day\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/stablecoin/network-data/supply?token=usdt_eth&window=day")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/stablecoin/network-data/supply?token=usdt_eth&window=day"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: supply_total, supply_minted, supply_burned, supply_circulating, supply_issued, supply_redeemed
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - supply_total
+                          - supply_minted
+                          - supply_burned
+                          - supply_circulating
+                          - supply_issued
+                          - supply_redeemed
+                          properties:
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            supply_total:
+                              type: number
+                              description: The total amount of BTC in existence.
+                            supply_minted:
+                              type: number
+                              description: The amount of tokens minted (increase in total supply).
+                            supply_burned:
+                              type: number
+                              description: The amount of tokens burned (decrease in total supply).
+                            supply_circulating:
+                              type: number
+                              description: The approximation of the amount of tokens that are circulating in the market.
+                            supply_issued:
+                              type: number
+                              description: The amount of tokens issued (increase in circulating supply).
+                            supply_redeemed:
+                              type: number
+                              description: The amount of tokens redeemed (decrease in circulating supply).
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    supply_total: 97070655229.72
+                    supply_minted: 0
+                    supply_burned: 0
+                    supply_circulating: 94316539729.04
+                    supply_issued: 70000000
+                    supply_redeemed: 27500000.01
+                  - date: '2026-06-13'
+                    supply_total: 97070655229.72
+                    supply_minted: 0
+                    supply_burned: 0
+                    supply_circulating: 94274039729.05
+                    supply_issued: 0
+                    supply_redeemed: 8056000
+      security:
+      - AccessToken: []
+  /stablecoin/network-data/events-count:
+    get:
+      tags:
+      - Stablecoin Network Data
+      summary: Events Count
+      description: 'This endpoint returns metrics related to the number of events. We provide several metrics. events_mint_count, events_issue_count, events_burn_count and events_redeem_count are metrics that represent the number of events related to each actions (mint, issue, burn, redeem). For further information about the actions, please refer to the section Stablecoin Issuing Mechanism.
+
+
+        **📖 Data Guide:** Stablecoin Network Data — definition, interpretation, and chart examples.'
+      operationId: getEventsCountSC
+      parameters:
+      - description: A Stablcoin token from the table that we support. [See here](#tag/Supported-Stablecoin-List)
+        explode: false
+        in: query
+        name: token
+        required: true
+        schema:
+          type: string
+        style: form
+        example: usdt_eth
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/stablecoin/network-data/events-count?token=usdt_eth&window=day" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/stablecoin/network-data/events-count?token=usdt_eth&window=day\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/stablecoin/network-data/events-count?token=usdt_eth&window=day\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/stablecoin/network-data/events-count?token=usdt_eth&window=day")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/stablecoin/network-data/events-count?token=usdt_eth&window=day"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: transfer, mint, issue, burn, redeem
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - events_transfer_count
+                          - events_mint_count
+                          - events_issue_count
+                          - events_burn_count
+                          - events_redeem_count
+                          properties:
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            events_transfer_count:
+                              type: number
+                              description: The number of events that invokes transfer of positive(non-zero) amount of tokens.
+                            events_mint_count:
+                              type: number
+                              description: The number of events to mint(i.e. create) tokens, which results in a increased total supply.
+                            events_issue_count:
+                              type: number
+                              description: The number of events to issue tokens, which delivered tokens to the clients and increased circulating supply.
+                            events_burn_count:
+                              type: number
+                              description: The number of events to burn(i.e. revoke) tokens that results in a decreased supply.
+                            events_redeem_count:
+                              type: number
+                              description: The number of events to redeem tokens that results in a decrease in the circulating supply.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    events_transfer_count: 1222121
+                    events_mint_count: 0
+                    events_issue_count: 2
+                    events_burn_count: 0
+                    events_redeem_count: 2
+                  - date: '2026-06-13'
+                    events_transfer_count: 1361563
+                    events_mint_count: 0
+                    events_issue_count: 1
+                    events_burn_count: 0
+                    events_redeem_count: 4
+      security:
+      - AccessToken: []
+  /stablecoin/network-data/tokens-transferred:
+    get:
+      tags:
+      - Stablecoin Network Data
+      summary: Tokens Transferred
+      description: 'This endpoint returns metrics related to the number of tokens transferred, i.e transaction volume. We provide several metrics, `tokens_transferred_total`, the total number of transferred tokens, and `tokens_transferred_mean`, the mean tokens transferred per transaction.
+
+
+        **📖 Data Guide:** Stablecoin Network Data — definition, interpretation, and chart examples.'
+      operationId: getTokensTransferredSC
+      parameters:
+      - description: A Stablcoin token from the table that we support. [See here](#tag/Supported-Stablecoin-List)
+        explode: false
+        in: query
+        name: token
+        required: true
+        schema:
+          type: string
+        style: form
+        example: usdt_eth
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/stablecoin/network-data/tokens-transferred?token=usdt_eth&window=day" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/stablecoin/network-data/tokens-transferred?token=usdt_eth&window=day\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/stablecoin/network-data/tokens-transferred?token=usdt_eth&window=day\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/stablecoin/network-data/tokens-transferred?token=usdt_eth&window=day")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/stablecoin/network-data/tokens-transferred?token=usdt_eth&window=day"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: tokens_transferred_total, tokens_transferred_mean
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - tokens_transferred_total
+                          - tokens_transferred_mean
+                          - tokens_transferred_median
+                          properties:
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            tokens_transferred_total:
+                              type: number
+                              description: Total number of tokens transferred in that window.
+                            tokens_transferred_mean:
+                              type: number
+                              description: The mean of tokens transferred per transaction.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    tokens_transferred_total: 13534687845.65
+                    tokens_transferred_mean: 11074.75
+                  - date: '2026-06-13'
+                    tokens_transferred_total: 14432911614.68
+                    tokens_transferred_mean: 10600.25
+      security:
+      - AccessToken: []
+  /stablecoin/network-data/addresses-count:
+    get:
+      tags:
+      - Stablecoin Network Data
+      summary: Addresses Count
+      description: 'This endpoint returns metrics relating to the number of used addresses to transfer the token. We provide several metrics, `addresses_active_count`, the total number of unique addresses that were active (either sender or receiver) on the blockchain in a given window, `addresses_active_sender_count`, the number of addresses that were active as a sender, `addresses_active_receiver_count`, the number of addresses that were active as a receiver.
+
+
+        **📖 Data Guide:** Stablecoin Network Data — definition, interpretation, and chart examples.'
+      operationId: getAddressesCountSC
+      parameters:
+      - description: A Stablcoin token from the table that we support. [See here](#tag/Supported-Stablecoin-List)
+        explode: false
+        in: query
+        name: token
+        required: true
+        schema:
+          type: string
+        style: form
+        example: usdt_eth
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/stablecoin/network-data/addresses-count?token=usdt_eth&window=day" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/stablecoin/network-data/addresses-count?token=usdt_eth&window=day\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/stablecoin/network-data/addresses-count?token=usdt_eth&window=day\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/stablecoin/network-data/addresses-count?token=usdt_eth&window=day")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/stablecoin/network-data/addresses-count?token=usdt_eth&window=day"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: addresses_active_count, addresses_active_sender_count, addresses_active_receiver_count, addresses_active_sender_percent, addresses_active_receiver_percent
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - addresses_active_count
+                          - addresses_active_sender_count
+                          - addresses_active_receiver_count
+                          - addresses_active_sender_percent
+                          - addresses_active_receiver_percent
+                          properties:
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            addresses_active_count:
+                              type: number
+                              description: The total number of unique addresses that were active (either sender or receiver) on the blockchain in a given window.
+                            addresses_active_sender_count:
+                              type: number
+                              description: The number of addresses that were active as a sender.
+                            addresses_active_receiver_count:
+                              type: number
+                              description: The number of addresses that were active as a receiver.
+                            addresses_active_sender_percent:
+                              type: number
+                              description: The percentage of active senders relative to total active addresses.
+                            addresses_active_receiver_percent:
+                              type: number
+                              description: The percentage of active receivers relative to total active addresses.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    addresses_active_count: 291965
+                    addresses_active_sender_count: 216977
+                    addresses_active_receiver_count: 242733
+                    addresses_active_sender_percent: 74.31609953
+                    addresses_active_receiver_percent: 83.13770486
+                  - date: '2026-06-13'
+                    addresses_active_count: 306247
+                    addresses_active_sender_count: 233781
+                    addresses_active_receiver_count: 260187
+                    addresses_active_sender_percent: 76.33740086
+                    addresses_active_receiver_percent: 84.95985267
+      security:
+      - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For each API request, include this HTTP header:
+
+        `Authorization` with the `Bearer <YOUR_API_KEY>`. Bearer access token is the type of HTTP Authorization.  You have to include access token to the HTTP header and note that leading bearer is required.
+
+        You must include your access token in HTTP header in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.'
+    QueryParameter:
+      type: apiKey
+      name: api_key
+      in: query
+      description: 'For each API reqeust, include `api_key` parameter.
+
+        You must request with your access token in query parameter in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.
+
+        If you are using Excel, you can use the `api_key` parameter to request with your access token to return data either in `json` or `csv`.'
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Available Endpoints
+  - Supported Stablecoin List
+  - Supported ERC20 List
+  - Supported Alt List
+- name: Bitcoin
+  tags:
+  - BTC Entity Status
+  - BTC Exchange Flows
+  - BTC Flow Indicator
+  - BTC Market Indicator
+  - BTC Network Indicator
+  - BTC Miner Flows
+  - BTC Inter Entity Flows
+  - BTC Fund Data
+  - BTC Market Data
+  - BTC Miner Data
+  - BTC Network Data
+  - BTC Mempool Statistics
+  - BTC Lightning Statistics
+- name: Ethereum
+  tags:
+  - ETH Entity Status
+  - ETH Exchange Flows
+  - ETH Flow Indicator
+  - ETH Market Indicator
+  - ETH 2.0
+  - ETH Fund Data
+  - ETH Market Data
+  - ETH Network Data
+- name: XRP
+  tags:
+  - XRP Entity Status
+  - XRP Entity Flows
+  - XRP Flow Indicator
+  - XRP Market Data
+  - XRP Network Data
+  - XRP Network Indicator
+  - XRP Dex Data
+  - XRP AMM Data
+- name: TRX
+  tags:
+  - TRX Market Data
+  - TRX Network Data
+  - TRX DEFI
+- name: Stablecoin
+  tags:
+  - Stablecoin Entity Status
+  - Stablecoin Exchange Flows
+  - Stablecoin Flow Indicator
+  - Stablecoin Market Data
+  - Stablecoin Network Data
+- name: ERC20
+  tags:
+  - ERC20 Entity Status
+  - ERC20 Exchange Flows
+  - ERC20 Flow Indicator
+  - ERC20 Market Data
+  - ERC20 Network Data
+- name: Alt
+  tags:
+  - Alt Market Data
+- name: Utilities
+  tags:
+  - Latency

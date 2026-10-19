@@ -1,0 +1,1300 @@
+openapi: 3.2.0
+info:
+  version: 1.3.0
+  title: CryptoQuant Data BTC Market Indicator API
+  termsOfService: https://cryptoquant.com/terms-of-service
+  contact:
+    name: API Support
+    email: contact@cryptoquant.com
+  description: The CryptoQuant Data API provides simple and powerful endpoints to get information on general transaction data and aggregate on-chain statistics straight from the blockchain. The API root endpoint URL is `https://api.cryptoquant.com/v1/`.
+servers:
+- url: https://api.cryptoquant.com/v1
+  description: Default server
+tags:
+- name: BTC Market Indicator
+  description: 'This namespace contains endpoints to retrieve MVRV(Market-Value-to-Realized-Value), Estimated Leverage Ratio, and etc. We provide certain indicators to avoid any risks, assume upside or downside potentials, and give insights on the value of bitcoin.
+
+    We also provide USD and USDT spot price of BTC from global exchanges and BTC index price. CryptoQuant''s BTC index price is VWAP(Volume Weighted Average Price) of aggregated price data from all exchanges we provide.
+
+    For more detailed information, please refer to the description of each metric.'
+paths:
+  /btc/market-indicator/estimated-leverage-ratio:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: Estimated Leverage Ratio
+      description: 'By dividing the open interest of an exchange by their BTC reserve, you can estimate a relative average user leverage. Whenever the leverage value reaches a high, there is rapid volatility. Similar to Open Interest, but more accurate because it reflects the growth of the exchange itself. This is experimental indicator but it seems this reflects market sentiment. You can see how aggressive people are and how conservative they are in terms of investment. For ''In Progress'' exchanges, estimated leverage ratio is not supported yet even though they provide open interest.
+
+        __Go to Data Guide‣__
+
+
+        > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to wallet address clustering. Historical data may change as new exchange wallets are discovered, added, and validated.
+
+
+        **📖 Data Guide:** Estimated Leverage Ratio — definition, interpretation, and chart examples.'
+      operationId: getEstimatedLeverageRatio
+      parameters:
+      - description: A derivative exchange from the table that we support. [See here](#operation/BTCgetOpenInterest).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: bitmex
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/estimated-leverage-ratio?exchange=binance&window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/estimated-leverage-ratio?exchange=binance&window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/estimated-leverage-ratio?exchange=binance&window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/estimated-leverage-ratio?exchange=binance&window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/estimated-leverage-ratio?exchange=binance&window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: The amount of open interest of exchange divided by their BTC reserve
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - estimated_leverage_ratio
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            estimated_leverage_ratio:
+                              type: number
+                              description: The amount of open interest in the given period and exchange divided by the BTC reserve of given exchange
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    estimated_leverage_ratio: 0.11231894
+                  - date: '2026-06-13'
+                    estimated_leverage_ratio: 0.12598907
+      security:
+      - AccessToken: []
+  /btc/market-indicator/stablecoin-supply-ratio:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: Stablecoin Supply Ratio
+      description: 'SSR(Stablecoin Supply Ratio) is a ratio of stablecoin supply in the whole cryptocurrency market where stablecoin is used as fiat substitute for trading. This means that the supply of stablecoin can be used to assess the potential buying pressure for bitcoin. The historical starting point is 2017-11-28 00:00:00.
+
+        __Go to Data Guide‣__
+
+
+        **📖 Data Guide:** Stablecoin Supply Ratio (SSR) — definition, interpretation, and chart examples.'
+      operationId: getStablecoinSupplyRatio
+      parameters:
+      - description: Currently, we only support `day`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/stablecoin-supply-ratio?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/stablecoin-supply-ratio?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/stablecoin-supply-ratio?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/stablecoin-supply-ratio?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/stablecoin-supply-ratio?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: stablecoin_supply_ratio
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. This metric supports only day resolution.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - stablecoin_supply_ratio
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            stablecoin_supply_ratio:
+                              type: number
+                              description: SSR is a ratio of stablecoin supply in the whole cryptocurrency market.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    stablecoin_supply_ratio: '10.74141241'
+                  - date: '2026-06-13'
+                    stablecoin_supply_ratio: '10.53184780'
+      security:
+      - AccessToken: []
+  /btc/market-indicator/mvrv:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: MVRV
+      description: 'MVRV(Market-Value-to-Realized-Value) is a ratio of `market_cap` divided by `realized_cap`. It can be interpreted as the relationship between short-term and long-term investors (i.e. speculators vs hodlers). When this value is too high, BTC price may be overvalued, and if it is too low, there is a possibility that the price is undervalued.
+
+        __Go to Data Guide‣__
+
+
+        **📖 Data Guide:** MVRV (Market Value to Realized Value) Ratio — definition, interpretation, and chart examples.'
+      operationId: getMarketIndicatorMVRV
+      parameters:
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/mvrv?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/mvrv?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/mvrv?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/mvrv?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/mvrv?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: mvrv
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - mvrv
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            mvrv:
+                              type: number
+                              description: market_cap/realized_cap
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    mvrv: 1.22798809
+                  - date: '2026-06-13'
+                    mvrv: 1.20322035
+      security:
+      - AccessToken: []
+  /btc/market-indicator/sopr:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: Spent Output Profit Ratio
+      description: '`sopr` is abbreviation of Spent Output Profit Ratio.
+
+        Spent Output Profit Ratio evaluates the profit ratio of the whole market participants by comparing the value of outputs at spent time to created time.
+
+        `sopr` is a ratio that is calculated as the USD value of spent outputs at the spent time divided by the USD value of spent outputs at the created time.
+
+        So you can see the value when UTxO destroyed. In a simple way, you can estimate the distribution of spent transaction output are in profit or not.
+
+
+        **📖 Data Guide:** Spent Output Profit Ratio (SOPR) · aSOPR (Adjusted SOPR) · STH-SOPR · LTH-SOPR — definition, interpretation, and chart examples.'
+      operationId: getSOPR
+      parameters:
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/sopr?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/sopr?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/sopr?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/sopr?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/sopr?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: spent_output_profit_ratio
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - sopr
+                          - a_sopr
+                          - sth_sopr
+                          - lth_sopr
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            sopr:
+                              type: number
+                              description: Spent Output Profit Ratio is a ratio of spent outputs in profit at the time of the window.
+                            a_sopr:
+                              type: number
+                              description: Adjusted spent output only includes alive more than 1 hour.
+                            sth_sopr:
+                              type: number
+                              description: Short term holder spent output only includes alive more than 1 hour and less than 155 days.
+                            lth_sopr:
+                              type: number
+                              description: Long term holder spent output only includes alive more than 155 days.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    sopr: 1.00109708
+                    a_sopr: 1.00222506
+                    sth_sopr: 0.99855935
+                    lth_sopr: 1.39829323
+                  - date: '2026-06-13'
+                    sopr: 0.9994445
+                    a_sopr: 0.99887337
+                    sth_sopr: 0.99892421
+                    lth_sopr: 0.98953807
+      security:
+      - AccessToken: []
+  /btc/market-indicator/sopr-ratio:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: SOPR Ratio
+      description: 'SOPR Ratio is calculated as long term holders'' SOPR divided by short term holders'' SOPR. Higher value of the ratio means higher spent profit of LTH over STH, which is usually useful for spotting market tops.
+
+
+        **📖 Data Guide:** SOPR Ratio (LTH-SOPR/STH-SOPR) — definition, interpretation, and chart examples.'
+      operationId: getSOPRRatio
+      parameters:
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/sopr-ratio?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/sopr-ratio?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/sopr-ratio?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/sopr-ratio?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/sopr-ratio?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Long term holders' SOPR divided by short term holders' SOPR.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - sopr_ratio
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            sopr_ratio:
+                              type: number
+                              description: Long term holders' SOPR divided by short term holders' SOPR.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    sopr_ratio: 1.40031059
+                  - date: '2026-06-13'
+                    sopr_ratio: 0.99060375
+      security:
+      - AccessToken: []
+  /btc/market-indicator/realized-price:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: Realized Price
+      description: 'Realized Price is calculated as Realized Cap divided by the total coin supply. It measures the average price weighted by the supply of what the entire market participants paid for their coins. It sometimes can be interpreted as the on-chain support or resistance price.
+
+
+        **📖 Data Guide:** Realized Price — definition, interpretation, and chart examples.'
+      operationId: getRealizedPrice
+      parameters:
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/realized-price?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/realized-price?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/realized-price?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/realized-price?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/realized-price?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Realized Cap divided by total supply.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - realized_price
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            realized_price:
+                              type: number
+                              description: Realized Cap divided by total supply.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    realized_price: 53506.13
+                  - date: '2026-06-13'
+                    realized_price: 53504.36
+      security:
+      - AccessToken: []
+  /btc/market-indicator/utxo-realized-price-age-distribution:
+    get:
+      tags:
+      - BTC Market Indicator
+      summary: UTxO Realized Price Age Distribution
+      description: 'UTxO Realized Price Age Distribution is a set of realized prices along with age bands. The metrics help us to overview each cohort’s holding behavior by overlaying a set of different realized prices.
+
+
+        **📖 Data Guide:** Realized Price - UTXO Age Bands — definition, interpretation, and chart examples.'
+      operationId: getUTxORealizedPriceAgeDistribution
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-indicator/utxo-realized-price-age-distribution?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-indicator/utxo-realized-price-age-distribution?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-indicator/utxo-realized-price-age-distribution?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-indicator/utxo-realized-price-age-distribution?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-indicator/utxo-realized-price-age-distribution?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: utxo-realized-price-age-distribution
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - range_0d_1d
+                          - range_1d_1w
+                          - range_1w_1m
+                          - range_1m_3m
+                          - range_3m_6m
+                          - range_6m_12m
+                          - range_12m_18m
+                          - range_18m_2y
+                          - range_2y_3y
+                          - range_3y_5y
+                          - range_5y_7y
+                          - range_7y_10y
+                          - range_10y_inf
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block or window=hour is used.
+                            range_0d_1d:
+                              type: number
+                              description: Realized price of UTxOs of ages between 0 day to 1 day.
+                            range_1d_1w:
+                              type: number
+                              description: Realized price of UTxOs of ages between 1 day to 1 week.
+                            range_1w_1m:
+                              type: number
+                              description: Realized price of UTxOs of ages between 1 week to 1 month.
+                            range_1m_3m:
+                              type: number
+                              description: Realized price of UTxOs of ages between 1 month to 3 months.
+                            range_3m_6m:
+                              type: number
+                              description: Realized price of UTxOs of ages between 3 months to 6 months.
+                            range_6m_12m:
+                              type: number
+                              description: Realized price of UTxOs of ages between 6 months to 12 months.
+                            range_12m_18m:
+                              type: number
+                              description: Realized price of UTxOs of ages between 12 months to 18 months.
+                            range_18m_2y:
+                              type: number
+                              description: Realized price of UTxOs of ages between 18 months to 2 years.
+                            range_2y_3y:
+                              type: number
+                              description: Realized price of UTxOs of ages between 2 years to 3 years.
+                            range_3y_5y:
+                              type: number
+                              description: Realized price of UTxOs of ages between 3 years to 5 years.
+                            range_5y_7y:
+                              type: number
+                              description: Realized price of UTxOs of ages between 5 years to 7 years.
+                            range_7y_10y:
+                              type: number
+                              description: Realized price of UTxOs of ages between 7 years to 10 years.
+                            range_10y_inf:
+                              type: number
+                              description: Realized price of UTxOs of ages over 10 years.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    range_0d_1d: 64415.03
+                    range_1d_1w: 63043.48
+                    range_1w_1m: 69814.43
+                    range_1m_3m: 75530.77
+                    range_3m_6m: 80884.03
+                    range_6m_12m: 102541.83
+                    range_12m_18m: 96942.28
+                    range_18m_2y: 74288.37
+                    range_2y_3y: 49186.6
+                    range_3y_5y: 31931.09
+                    range_5y_7y: 27490.85
+                    range_7y_10y: 6106.63
+                    range_10y_inf: 112.86542965
+                  - date: '2026-06-13'
+                    range_0d_1d: 64073.03
+                    range_1d_1w: 62945.27
+                    range_1w_1m: 70555.69
+                    range_1m_3m: 75312.35
+                    range_3m_6m: 81064.51
+                    range_6m_12m: 102607.56
+                    range_12m_18m: 96965.83
+                    range_18m_2y: 74106.39
+                    range_2y_3y: 48816.49
+                    range_3y_5y: 31993.35
+                    range_5y_7y: 27465.64
+                    range_7y_10y: 6102.06
+                    range_10y_inf: 112.7471085
+      security:
+      - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For each API request, include this HTTP header:
+
+        `Authorization` with the `Bearer <YOUR_API_KEY>`. Bearer access token is the type of HTTP Authorization.  You have to include access token to the HTTP header and note that leading bearer is required.
+
+        You must include your access token in HTTP header in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.'
+    QueryParameter:
+      type: apiKey
+      name: api_key
+      in: query
+      description: 'For each API reqeust, include `api_key` parameter.
+
+        You must request with your access token in query parameter in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.
+
+        If you are using Excel, you can use the `api_key` parameter to request with your access token to return data either in `json` or `csv`.'
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Available Endpoints
+  - Supported Stablecoin List
+  - Supported ERC20 List
+  - Supported Alt List
+- name: Bitcoin
+  tags:
+  - BTC Entity Status
+  - BTC Exchange Flows
+  - BTC Flow Indicator
+  - BTC Market Indicator
+  - BTC Network Indicator
+  - BTC Miner Flows
+  - BTC Inter Entity Flows
+  - BTC Fund Data
+  - BTC Market Data
+  - BTC Miner Data
+  - BTC Network Data
+  - BTC Mempool Statistics
+  - BTC Lightning Statistics
+- name: Ethereum
+  tags:
+  - ETH Entity Status
+  - ETH Exchange Flows
+  - ETH Flow Indicator
+  - ETH Market Indicator
+  - ETH 2.0
+  - ETH Fund Data
+  - ETH Market Data
+  - ETH Network Data
+- name: XRP
+  tags:
+  - XRP Entity Status
+  - XRP Entity Flows
+  - XRP Flow Indicator
+  - XRP Market Data
+  - XRP Network Data
+  - XRP Network Indicator
+  - XRP Dex Data
+  - XRP AMM Data
+- name: TRX
+  tags:
+  - TRX Market Data
+  - TRX Network Data
+  - TRX DEFI
+- name: Stablecoin
+  tags:
+  - Stablecoin Entity Status
+  - Stablecoin Exchange Flows
+  - Stablecoin Flow Indicator
+  - Stablecoin Market Data
+  - Stablecoin Network Data
+- name: ERC20
+  tags:
+  - ERC20 Entity Status
+  - ERC20 Exchange Flows
+  - ERC20 Flow Indicator
+  - ERC20 Market Data
+  - ERC20 Network Data
+- name: Alt
+  tags:
+  - Alt Market Data
+- name: Utilities
+  tags:
+  - Latency

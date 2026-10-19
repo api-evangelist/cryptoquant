@@ -1,0 +1,1713 @@
+openapi: 3.2.0
+info:
+  version: 1.3.0
+  title: CryptoQuant Data BTC Market Data API
+  termsOfService: https://cryptoquant.com/terms-of-service
+  contact:
+    name: API Support
+    email: contact@cryptoquant.com
+  description: The CryptoQuant Data API provides simple and powerful endpoints to get information on general transaction data and aggregate on-chain statistics straight from the blockchain. The API root endpoint URL is `https://api.cryptoquant.com/v1/`.
+servers:
+- url: https://api.cryptoquant.com/v1
+  description: Default server
+tags:
+- name: BTC Market Data
+  description: This namespace contains endpoints to retrieve metrics related to the value of Bitcoin, including price, open interest, market cap, realized cap, etc. On top of providing basic market data like price and market cap, we focus on onchain indicators in order to evaluate the true value of Bitcoin. These indicators have been commonly used in building long term valuations, and identifying lows and highs. For more detailed information, please refer to the description of each metric.
+paths:
+  /btc/market-data/price-ohlcv:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Price OHLCV
+      description: 'This endpoint returns metrics related to BTC price. We provide two types of price, CryptoQuant''s BTC Index Price and USD or USDT price of BTC of global exchanges. Price OHLCV data consists of five metrics. `open`, the opening price at the beginning of the window, `close`, USD closing price at the end of the window,
+
+        `high`, the highest USD price in a given window, `low`, the lowest USD price in a given window,
+
+        and `volume`, the total volume traded in a given window. At this endpoint, metrics are calculated by Minute, Hour and Day. BTC Index Price is calculated by taking VWAP(Volume Weighted Average Price) of BTC price data aggregated from all exchanges we provide. The exchanges we provide are as follows. ### Supported Exchanges By Market
+
+
+        | Name | Market | Supported Exchanges |
+
+        |--------|---------|----------------------------|
+
+        | Spot | `spot` | All Exchange*, Binance, Binance US, Bitfinex, Bittrex, Coinbase Advanced, FTX**, Gemini, HTX Global, Kraken, OKX |
+
+        | Perpetual | `perpetual` | All Exchange*, Binance, Bitmex, Bybit, Deribit, FTX**, HTX Global, OKX |
+
+
+        > (*) Default exchange
+
+
+        > (**) Use in cautions due to the deprecation (no data update)
+
+
+        In order to get USD or USDT price of BTC of specific exchange from above (eg. `btcusdt` pair of `binance`),
+
+        you must specify `market`, `exchange` and `symbol` of BTC pair. For `volume` metric, the unit of volume could be USD, USDT or BTC. This is because exchanges have their own price data policy. All Exchange''s `volume` is in BTC and available since the earliest time of exchanges. Please refer to volume unit of each exchange from below table. ### Supported Pairs By Exchange
+
+
+        #### ◦ Spot
+
+        | Name | Exchange | Symbol | Volume Unit | Available Since |
+
+        |----------------|------------------|-----------------------------|--------------|-------------------------------|
+
+        | All Exchange | `all_exchange` | `btc_usd`* | BTC | 2009-01-03 18:15:00 |
+
+        | Binance | `binance` | `btc_usdt`* | BTC | 2017-08-17 04:00:00 |
+
+        | Binance US | `binance_us` | `btc_usd`*
+
+        `btc_usdt` | BTC | 2019-09-17 10:17:00
+
+        2019-09-23 08:34:00 |
+
+        | Bitfinex | `bitfinex` | `btc_usd`*
+
+        `btc_usdt` | BTC | 2013-04-01 00:07:00
+
+        2019-03-11 10:05:00 |
+
+        | Bittrex | `bittrex` | `btc_usd`*
+
+        `btc_usdt` | USD
+
+        USDT | 2018-05-31 16:26:00
+
+        2015-12-12 14:59:00 |
+
+        | Coinbase Advanced | `coinbase_advanced` | `btc_usd`* | BTC | 2015-07-20 21:37:00
+
+        | FTX** | `ftx` | `btc_usd`*
+
+        `btc_usdt` | USD
+
+        USDT | 2019-07-21 13:11:00
+
+        2020-03-28 14:40:00 |
+
+        | Gemini | `gemini` | `btc_usd`* | BTC | 2019-08-30 00:00:00 |
+
+        | HTX Global | `htx_global` | `btc_usdt`* | BTC | 2019-11-19 00:00:00 |
+
+        | Kraken | `kraken` | `btc_usd`*
+
+        `btc_usdt` | BTC | 2013-10-06 21:34:00
+
+        2019-12-19 18:06:00 |
+
+        | OKX | `okx` | `btc_usdt`* | BTC | 2019-10-01 00:00:00 |
+
+
+        #### ◦ Perpetual
+
+        | Exchange | Exchange Symbol | Pair Symbol | Volume | Historical Starting Point |
+
+        |----------------|------------------|-------------------------------|-------------------|--------------------------------|
+
+        | All Exchange | `all_exchange` | `btc_usd`* | BTC | The earliest time in the exchanges below. |
+
+        | Binance | `binance` | `btc_usd`*
+
+        `btc_usdt` | Cont
+
+        BTC | 2020-08-11 07:02:00
+
+        2019-09-08 17:57:00 |
+
+        | Bitmex | `bitmex` | `btc_usd`* | USD | 2015-09-25 12:34:00 |
+
+        | Bybit | `bybit` | `btc_usd`*
+
+        `btc_usdt` | USD
+
+        BTC | 2018-11-14 16:00:00
+
+        2020-03-25 10:36:00 |
+
+        | Deribit | `deribit` | `btc_usd`* | USD | 2018-08-14 10:34:00 |
+
+        | FTX** | `ftx` | `btc_usd`* | USD | 2019-07-20 12:35:00 |
+
+        | HTX Global | `htx_global` | `btc_usd`*
+
+        `btc_usdt` | Cont
+
+        BTC | 2020-03-25 09:45:00
+
+        2020-10-21 09:08:00 |
+
+        | OKX | `okx` | `btc_usd`*
+
+        `btc_usdt` | Cont
+
+        BTC | 2019-03-30 00:00:00
+
+        2019-12-25 00:00:00 |
+
+
+        > (*) Default exchange
+
+
+        > (**) Use in cautions due to the deprecation (no data update)
+
+
+        > We calculate the OHLCV data of a day from the beginning of UTC 00:00:00. > However, the OHLCV data in official sites of HTX and OKX are calculated from the beginning of UTC 16:00:00. > Thus, be aware that there may be some intended discrepancy between those.'
+      operationId: getBTCPriceOHLCV
+      parameters:
+      - description: A market type from the table that we support. [See here](#operation/getBTCPriceOHLCV)
+        explode: false
+        in: query
+        name: market
+        required: false
+        schema:
+          type: string
+          default: spot
+        style: form
+        example: spot
+      - description: A exchange from the table that we support. [See here](#operation/getBTCPriceOHLCV).
+        explode: false
+        in: query
+        name: exchange
+        required: false
+        schema:
+          type: string
+          default: all_exchange
+        style: form
+        example: binance
+      - description: A BTC pair symbol from the table that we support. [See here](#operation/getBTCPriceOHLCV)
+        explode: false
+        in: query
+        name: symbol
+        required: false
+        schema:
+          type: string
+        style: form
+        example: btc_usd
+      - description: A window from the table that we support. [See here](#operation/getBTCPriceOHLCV)
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/price-ohlcv?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Price OHLCV Data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, min, or block and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - open
+                          - high
+                          - low
+                          - close
+                          - volume
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            open:
+                              type: number
+                              description: opening price at the beginning of the window.
+                            high:
+                              type: number
+                              description: opening price at the end of the window.
+                            low:
+                              type: number
+                              description: The highest price in a given window.
+                            close:
+                              type: number
+                              description: The lowest price in a given window.
+                            volume:
+                              type: number
+                              description: The total traded amount in a given window.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    open: 64393.87
+                    high: 65753.52
+                    low: 63628.02
+                    close: 65704.89
+                    volume: 25241.79
+                  - date: '2026-06-13'
+                    open: 63541.16
+                    high: 64723.5
+                    low: 63393.29
+                    close: 64377.53
+                    volume: 18332.87
+      security:
+      - AccessToken: []
+  /btc/market-data/open-interest:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Open Interest
+      description: 'This endpoint returns BTC Perpetual Open Interest from derivative exchanges. Supported exchanges for Open Interest are below. Note we unify the unit of return value to USD for each exchange where its contract specification may vary.
+
+
+        | Name | Exchange | Symbol | Available Since |
+
+        |----------------|--------------|-------------|-----------------------------|
+
+        | All Exchanges | `all_exchange` | `all_symbol` | The earliest time in the exchanges below. |
+
+        | Binance | `binance` | `all_symbol`
+
+        `btc_busd`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2021-01-12 00:00:00
+
+        2020-08-11 00:00:00
+
+        2020-03-13 02:13:00 |
+
+        | Bitfinex | `bitfinex` | `all_symbol`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2020-06-01 00:00:00 |
+
+        | Bitmex | `bitmex` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2019-03-30 00:00:00 |
+
+        | Bybit | `bybit` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2019-11-07 00:00:00
+
+        2020-05-28 00:00:00 |
+
+        | Deribit | `deribit` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2019-03-30 00:00:00 |
+
+        | FTX** | `ftx` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2020-05-13 00:00:00 |
+
+        | Gate.io | `gate_io` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2020-07-01 00:00:00
+
+        2020-07-01 00:00:00 |
+
+        | HTX Global | `htx_global` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2020-06-23 00:00:00
+
+        2021-08-26 04:00:00 |
+
+        | Kraken | `kraken` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2019-03-30 00:00:00 |
+
+        | OKX | `okx` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2019-09-05 23:59:00
+
+        2020-01-01 00:00:00 |
+
+
+        > (**) Use in cautions due to the deprecation (no data update)
+
+
+        **📖 Data Guide:** Open Interest — definition, interpretation, and chart examples.'
+      operationId: BTCgetOpenInterest
+      parameters:
+      - description: A derivative exchange from the table that we support. [See here](#operation/BTCgetOpenInterest).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: bitmex
+      - description: Currently we support `day`, `hour`, and `min`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/open-interest?window=day&from=20191001&exchange=bitmex" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/open-interest?window=day&from=20191001&exchange=bitmex\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/open-interest?window=day&from=20191001&exchange=bitmex\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/open-interest?window=day&from=20191001&exchange=bitmex")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/open-interest?window=day&from=20191001&exchange=bitmex"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Open Interest in USD
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or min and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - open_interest
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            open_interest:
+                              type: string
+                              description: The amount of open interest in the given period and exchange. The standard unit can differ from each exchange.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    open_interest: 106894000
+                  - date: '2026-06-13'
+                    open_interest: 117418600
+      security:
+      - AccessToken: []
+  /btc/market-data/funding-rates:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Funding Rates
+      description: 'Funding rates represents traders'' sentiments of which position they bet on in perpetual swaps market. Positive funding rates implies that many traders are bullish and long traders pay funding to short traders. Negative funding rates implies many traders are bearish and short traders pay funding to long traders.
+
+
+        | Name | Exchange | Symbol | Available Since |
+
+        |----------------|--------------|----|-------------------------|
+
+        | All Exchanges | `all_exchange` | | The earliest time in the exchanges below. |
+
+        | Binance | `binance` | BTC-USDT | 2019-09-10 00:00:00 |
+
+        | Bybit | `bybit` | BTC-USD | 2019-12-01 00:00:00 |
+
+        | Bitmex | `bitmex` | BTC-USD | 2016-05-14 04:00:00 |
+
+        | Deribit | `deribit` | BTC-PERPETUAL | 2019-03-30 00:00:00 |
+
+        | HTX Global | `htx_global` | BTC-USD | 2020-03-25 04:00:00 |
+
+        | OKX | `okx` | BTC-USD | 2019-04-01 00:00:00 |
+
+
+        **📖 Data Guide:** Funding Rates — definition, interpretation, and chart examples.'
+      operationId: BTCgetFundingRates
+      parameters:
+      - description: A derivative exchange from the table that we support. [See here](#operation/getFundingRates).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: bitmex
+      - description: Currently we support `day`, `hour`, and `min`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/funding-rates?window=day&from=20191001&exchange=bitmex" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/funding-rates?window=day&from=20191001&exchange=bitmex\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/funding-rates?window=day&from=20191001&exchange=bitmex\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/funding-rates?window=day&from=20191001&exchange=bitmex")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/funding-rates?window=day&from=20191001&exchange=bitmex"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Funding Rates in percentage
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or min and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - funding_rates
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            funding_rates:
+                              type: number
+                              description: Funding rates in the given period and exchange. The standard unit is percentage.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    funding_rates: -0.00849625
+                  - date: '2026-06-13'
+                    funding_rates: -0.00332229
+      security:
+      - AccessToken: []
+  /btc/market-data/taker-buy-sell-stats:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Taker Buy Sell Stats
+      description: 'Taker Buy/Sell Stats represent takers'' sentiment of which position they are taking in the market. This metric is calculated with perpetual swap trades in each exchange.
+
+        `taker_buy_volume` is volume that takers buy.
+
+        `taker_sell_volume` is volume that takers sell.
+
+        `taker_total_volume` is the sum of `taker_buy_volume` and `taker_sell_volume`.
+
+        `taker_buy_ratio` is the ratio of `taker_buy_volume` divided by `taker_total_volume`.
+
+        `taker_sell_ratio` is the ratio of `taker_sell_volume` divided by `taker_total_volume`.
+
+        `taker_buy_sell_ratio` is the ratio of `taker_buy_volume` divided by `taker_sell_volume`.
+
+        Note we unify the unit of return value to USD for each exchange where its contract specification may vary.
+
+
+        | Name | Exchange | Symbol | Available Since |
+
+        |----------------|--------------|------|-----------------------------|
+
+        | All Exchanges | `all_exchange` | | The earliest time in the exchanges below. |
+
+        | Binance | `binance` | BTC-USDT | 2019-09-08 17:57:00 |
+
+        | Bybit | `bybit` | BTC-USD | 2019-11-07 00:00:00 |
+
+        | Bitmex | `bitmex` | BTC-USD | 2015-09-25 12:34:00 |
+
+        | Deribit | `deribit` | BTC-PERPETUAL | 2019-03-30 00:00:00 |
+
+        | HTX Global | `htx_global` | BTC-USD | 2020-03-28 00:00:00 |
+
+        | OKX | `okx` | BTC-USD | 2019-03-30 00:00:00 |
+
+
+        **📖 Data Guide:** Taker Buy Sell Volume/Ratio — definition, interpretation, and chart examples.'
+      operationId: BTCgetTakerBuySellStats
+      parameters:
+      - description: A derivative exchange from the table that we support. [See here](#operation/getLongShortStats).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: bitmex
+      - description: Currently we support `day`, `hour`, and `min`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/taker-buy-sell-stats?window=day&from=20191001&exchange=bitmex" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/taker-buy-sell-stats?window=day&from=20191001&exchange=bitmex\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/taker-buy-sell-stats?window=day&from=20191001&exchange=bitmex\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/taker-buy-sell-stats?window=day&from=20191001&exchange=bitmex")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/taker-buy-sell-stats?window=day&from=20191001&exchange=bitmex"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Taker Buy, Sell volume and ratio
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or min and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - taker_buy_volume
+                          - taker_sell_volume
+                          - taker_buy_ratio
+                          - taker_sell_ratio
+                          - taker_buy_sell_ratio
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            taker_buy_volume:
+                              type: number
+                              description: Volume that takers buy in the given period and exchange.
+                            taker_sell_volume:
+                              type: number
+                              description: Volume that takers sell in the given period and exchange.
+                            taker_buy_ratio:
+                              type: number
+                              description: The ratio of taker buy volume to taker total volume in the given period and exchange. Taker total volume is sum of taker buy and sell volume.
+                            taker_sell_ratio:
+                              type: number
+                              description: The ratio of taker sell volume to taker total volume in the given period and exchange. Taker total volume is sum of taker buy and sell volume.
+                            taker_buy_sell_ratio:
+                              type: number
+                              description: The ratio fo taker buy volume to taker sell volume in the given period and exchange.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    taker_buy_volume: 78500800
+                    taker_sell_volume: 73270100
+                    taker_buy_ratio: 0.51723222
+                    taker_sell_ratio: 0.48276778
+                    taker_buy_sell_ratio: 1.07138928
+                  - date: '2026-06-13'
+                    taker_buy_volume: 72091500
+                    taker_sell_volume: 67583000
+                    taker_buy_ratio: 0.51613931
+                    taker_sell_ratio: 0.48386069
+                    taker_buy_sell_ratio: 1.06671056
+      security:
+      - AccessToken: []
+  /btc/market-data/liquidations:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Liquidations
+      description: 'Liquidations are sum of forced market orders to exit leveraged positions caused by price volatility. Liquidations indicate current price volatility and traders'' sentiment which side they had been betting.
+
+        Note that Binance''s liquidation data collection policy has changed since 2021-04-27, which makes the distribution of the data has changed after that.
+
+
+        | Name | Exchange | Symbol | Available Since |
+
+        |----------------|----------------|--------------|-----------------------------|
+
+        | All Exchanges | `all_exchange` | `all_symbol` | The earliest time in the exchanges below. |
+
+        | Binance | `binance` | `all_symbol`
+
+        `btc_busd`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2019-11-20 00:00:00
+
+        2020-08-14 00:00:00
+
+        2021-01-15 00:00:00 |
+
+        | Bitfinex | `bitfinex` | `all_symbol`
+
+        `btc_usdt`| The earliest time in the symbols.
+
+        2019-09-18 00:00:00 |
+
+        | Bitmex | `bitmex` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2019-04-02 00:00:00 |
+
+        | Bybit | `bybit` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2020-12-20 00:00:00
+
+        2020-12-18 00:00:00 |
+
+        | Deribit | `deribit` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2019-05-25 00:00:00 |
+
+        | FTX** | `ftx` | `all_symbol`
+
+        `btc_usd` | The earliest time in the symbols.
+
+        2019-08-04 00:00:00 |
+
+        | Gate.io | `gate_io` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2018-12-20 16:00:00
+
+        2019-11-18 17:00:00 |
+
+        | HTX Global | `htx_global` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2020-06-26 00:00:00
+
+        2021-09-23 12:00:00 |
+
+        | OKX | `okx` | `all_symbol`
+
+        `btc_usd`
+
+        `btc_usdt` | The earliest time in the symbols.
+
+        2020-12-20 00:00:00
+
+        2020-12-17 00:00:00 |
+
+
+        > (**) Use in cautions due to the deprecation (no data update)'
+      operationId: getLiquidations
+      parameters:
+      - description: A derivative exchange from the table that we support. [See here](#operation/getLiquidations).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: deribit
+      - description: A BTC pair symbol from the table that we support. [See here](#operation/getLiquidations)
+        explode: false
+        in: query
+        name: symbol
+        required: false
+        schema:
+          type: string
+          default: all_symbol
+        style: form
+        example: btc_usd
+      - description: Currently we support `day`, `hour`, and `min`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/liquidations?window=day&from=20191001&exchange=deribit" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/liquidations?window=day&from=20191001&exchange=deribit\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/liquidations?window=day&from=20191001&exchange=deribit\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/liquidations?window=day&from=20191001&exchange=deribit")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/liquidations?window=day&from=20191001&exchange=deribit"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Amount of long/short liquidations orders
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or min and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - long_liquidations
+                          - short_liquidations
+                          - long_liquidations_usd
+                          - short_liquidations_usd
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            long_liquidations:
+                              type: number
+                              description: Amount of liquidated orders in long positions.
+                            short_liquidations:
+                              type: number
+                              description: Amount of liquidated orders in short positions.
+                            long_liquidations_usd:
+                              type: number
+                              description: Amount of liquidated orders in long positions in USD.
+                            short_liquidations_usd:
+                              type: number
+                              description: Amount of liquidated orders in short positions in USD.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    long_liquidations: 0
+                    short_liquidations: 0
+                    long_liquidations_usd: 0
+                    short_liquidations_usd: 0
+                  - date: '2026-06-13'
+                    long_liquidations: 0
+                    short_liquidations: 0
+                    long_liquidations_usd: 0
+                    short_liquidations_usd: 0
+      security:
+      - AccessToken: []
+  /btc/market-data/capitalization:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Capitalization
+      description: 'This endpoint returns metrics related to market capitalization. First, we provide `market_cap`, which is total market capitalization of BTC, calculated by multiplying the total supply with its USD price. Moreover, we provide several adjusted capitalization metrics which are used for further fundamental analysis. `realized_cap` is the sum of each UTXO * last movement price. Since cryptocurrencies can be lost, unclaimed, or unreachable through various bugs, `realized_cap` is introduced to discount those coins which have remained unmoved for a long period. It is one way to attempt to measure the value of Bitcoin. This can be described as an on-chain version of volume weighted average price(VWAP). `average_cap` is forever moving average, calculated by dividing the cumulated sum of daily market cap with the age of market. Instead of using fixed time for calculating the moving average (e.g. 50 days, 100days ...), this serves as the true mean. Both `realized_cap` and `average_cap` are used to calculate `delta_cap` (`realized_cap`-`average_cap`). `delta_cap` is often used to spot market bottoms. Moreover, by analyzing the movement of `delta_cap` which oscillates between `realized_cap` and `average_cap`, we could notice that market tops are reached when `delta_cap` is near `realized_cap`(in a log scaled chart). Another metric that can be used to spot market bottoms is `thermo_cap` which is the weighted cumulative sum of the mined cryptocurrency price. This metric provides the total amount of funds in the blockchain network and also helps to evaluate whether `market_cap` is overvalued or not.
+
+        __Go to Data Guide‣__
+
+
+        **📖 Data Guide:** Capitalization models — definition, interpretation, and chart examples.'
+      operationId: getCapitalization
+      parameters:
+      - description: Currently we support `day` and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/capitalization?window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/capitalization?window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/capitalization?window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/capitalization?window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/capitalization?window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: market_cap, realized_cap, average_cap, delta_cap, thermo_cap
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - market_cap
+                          - realized_cap
+                          - average_cap
+                          - delta_cap
+                          - thermo_cap
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            market_cap:
+                              type: number
+                              description: Market capitalization of BTC, calculated by total_supply * price_usd_close.
+                            realized_cap:
+                              type: number
+                              description: The sum of all UTXOs multiplied by the price they last moved.
+                            average_cap:
+                              type: number
+                              description: Forever moving average, calculated by dividing the cumulated sum of daily market cap with the age of market.
+                            delta_cap:
+                              type: number
+                              description: realized_cap minus average_cap.
+                            thermo_cap:
+                              type: number
+                              description: The weighted cumulative sum of the mined cryptocurrency price.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    market_cap: 1316911391763.75
+                    realized_cap: 1072413814088.69
+                    average_cap: 375045696010.16
+                    delta_cap: 697368118078.53
+                    thermo_cap: 95212452398.03
+                  - date: '2026-06-13'
+                    market_cap: 1290277923648.61
+                    realized_cap: 1072353807625.96
+                    average_cap: 374897859611.52
+                    delta_cap: 697455948014.44
+                    thermo_cap: 95182928950.38
+      security:
+      - AccessToken: []
+  /btc/market-data/coinbase-premium-index:
+    get:
+      tags:
+      - BTC Market Data
+      summary: Coinbase Premium Index
+      description: 'Coinbase Premium Index is calculated as percent difference from Binance price(BTCUSDT) to Coinbase price(BTCUSD). Coinbase Premium Gap is calculated as gap between Coinbase price(BTCUSD) and Binance price(BTCUSDT). The higher the premium, the stronger the spot buying pressure from Coinbase.
+
+
+        **📖 Data Guide:** Coinbase Premium — definition, interpretation, and chart examples.'
+      operationId: getBTCCoinbasePremiumIndex
+      parameters:
+      - description: Currently we support `day`, `hour`, and `min`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/market-data/coinbase-premium-index?window=day&from=20191001T000000&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/market-data/coinbase-premium-index?window=day&from=20191001T000000&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/market-data/coinbase-premium-index?window=day&from=20191001T000000&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/market-data/coinbase-premium-index?window=day&from=20191001T000000&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/market-data/coinbase-premium-index?window=day&from=20191001T000000&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Coinbase Premium Index in percentage and Coinbase Premium Gap
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or min and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - coinbase_premium_gap
+                          - coinbase_premium_index
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=min or window=hour is used.
+                            coinbase_premium_gap:
+                              type: number
+                              description: The gap between Coinbase Advanced price(USD pair) and Binance price(USDT pair).
+                            coinbase_premium_index:
+                              type: number
+                              description: The percent difference from Binance price(BTCUSDT) to Coinbase price(BTCUSD).
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    coinbase_premium_gap: -39.83
+                    coinbase_premium_index: -0.06058122
+                    coinbase_premium_gap_usdt_adjusted: 6.8499795
+                    coinbase_premium_index_usdt_adjusted: 0.01041138
+                  - date: '2026-06-13'
+                    coinbase_premium_gap: -28.02
+                    coinbase_premium_index: -0.04347016
+                    coinbase_premium_gap_usdt_adjusted: 57.22636281
+                    coinbase_premium_index_usdt_adjusted: 0.08866343
+      security:
+      - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For each API request, include this HTTP header:
+
+        `Authorization` with the `Bearer <YOUR_API_KEY>`. Bearer access token is the type of HTTP Authorization.  You have to include access token to the HTTP header and note that leading bearer is required.
+
+        You must include your access token in HTTP header in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.'
+    QueryParameter:
+      type: apiKey
+      name: api_key
+      in: query
+      description: 'For each API reqeust, include `api_key` parameter.
+
+        You must request with your access token in query parameter in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.
+
+        If you are using Excel, you can use the `api_key` parameter to request with your access token to return data either in `json` or `csv`.'
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Available Endpoints
+  - Supported Stablecoin List
+  - Supported ERC20 List
+  - Supported Alt List
+- name: Bitcoin
+  tags:
+  - BTC Entity Status
+  - BTC Exchange Flows
+  - BTC Flow Indicator
+  - BTC Market Indicator
+  - BTC Network Indicator
+  - BTC Miner Flows
+  - BTC Inter Entity Flows
+  - BTC Fund Data
+  - BTC Market Data
+  - BTC Miner Data
+  - BTC Network Data
+  - BTC Mempool Statistics
+  - BTC Lightning Statistics
+- name: Ethereum
+  tags:
+  - ETH Entity Status
+  - ETH Exchange Flows
+  - ETH Flow Indicator
+  - ETH Market Indicator
+  - ETH 2.0
+  - ETH Fund Data
+  - ETH Market Data
+  - ETH Network Data
+- name: XRP
+  tags:
+  - XRP Entity Status
+  - XRP Entity Flows
+  - XRP Flow Indicator
+  - XRP Market Data
+  - XRP Network Data
+  - XRP Network Indicator
+  - XRP Dex Data
+  - XRP AMM Data
+- name: TRX
+  tags:
+  - TRX Market Data
+  - TRX Network Data
+  - TRX DEFI
+- name: Stablecoin
+  tags:
+  - Stablecoin Entity Status
+  - Stablecoin Exchange Flows
+  - Stablecoin Flow Indicator
+  - Stablecoin Market Data
+  - Stablecoin Network Data
+- name: ERC20
+  tags:
+  - ERC20 Entity Status
+  - ERC20 Exchange Flows
+  - ERC20 Flow Indicator
+  - ERC20 Market Data
+  - ERC20 Network Data
+- name: Alt
+  tags:
+  - Alt Market Data
+- name: Utilities
+  tags:
+  - Latency

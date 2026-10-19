@@ -1,0 +1,1004 @@
+openapi: 3.2.0
+info:
+  version: 1.3.0
+  title: CryptoQuant Data XRP Flow Indicator API
+  termsOfService: https://cryptoquant.com/terms-of-service
+  contact:
+    name: API Support
+    email: contact@cryptoquant.com
+  description: The CryptoQuant Data API provides simple and powerful endpoints to get information on general transaction data and aggregate on-chain statistics straight from the blockchain. The API root endpoint URL is `https://api.cryptoquant.com/v1/`.
+servers:
+- url: https://api.cryptoquant.com/v1
+  description: Default server
+tags:
+- name: XRP Flow Indicator
+  description: This namespace contains endpoints to retrieve metrics related to XRP Flow Indicators.
+paths:
+  /xrp/flow-indicator/exchange-inflow-value-distribution:
+    get:
+      tags:
+      - XRP Flow Indicator
+      summary: Exchange Inflow Value Distribution
+      description: Exchange Inflow Value Distribution is a metric that shows the amount distribution of xrp tokens flowed into exchange wallets according to its value.
+      operationId: getExchangeInflowValueDistribution
+      parameters:
+      - description: An exchange from the table that we support. [See here](#tag/BTC-Exchange-Flows).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: binance
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: exchange inflow's distribution band by the amount of the trasferred tokens(xrp) at once
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - range_1000_below
+                          - range_1001_to_10000
+                          - range_10001_to_100000
+                          - range_100001_to_1000000
+                          - range_1000000_over
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            range_1000_below:
+                              type: number
+                              description: Exchange Inflow distribution value of which transferred xrp value is 1000 or less.
+                            range_1001_to_10000:
+                              type: number
+                              description: Exchange Inflow distribution value of which transferred xrp value is more than 1000 or less than 10000.
+                            range_10001_to_100000:
+                              type: number
+                              description: Exchange Inflow distribution value of which transferred xrp value is more than 10000 or less than 100000.
+                            range_100001_to_1000000:
+                              type: number
+                              description: Exchange Inflow distribution value of which transferred xrp value is more than 1000 or less than 100000.
+                            range_1000000_over:
+                              type: number
+                              description: Exchange Inflow distribution value of which transferred xrp value is 1000000 or more.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-15'
+                    range_1000_below: 0E-8
+                    range_1001_to_10000: 0E-8
+                    range_10001_to_100000: 0E-8
+                    range_100001_to_1000000: '404923.82393900'
+                    range_1000000_over: 0E-8
+                  - date: '2026-06-14'
+                    range_1000_below: '43.07083700'
+                    range_1001_to_10000: 0E-8
+                    range_10001_to_100000: '29061.75233100'
+                    range_100001_to_1000000: '156823.06575600'
+                    range_1000000_over: 0E-8
+      security:
+      - AccessToken: []
+  /xrp/flow-indicator/exchange-outflow-value-distribution:
+    get:
+      tags:
+      - XRP Flow Indicator
+      summary: Exchange Outflow Value Distribution
+      description: Exchange Outflow Value Distribution is a metric that shows the amount distribution of xrp tokens flowed out from exchange wallets according to its value.
+      operationId: getExchangeOutflowValueDistribution
+      parameters:
+      - description: An exchange from the table that we support. [See here](#tag/BTC-Exchange-Flows).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: binance
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-value-distribution?exchange=binance&window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: exchange outflow's distribution band by the amount of the trasferred tokens(xrp) at once
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - range_1000_below
+                          - range_1001_to_10000
+                          - range_10001_to_100000
+                          - range_100001_to_1000000
+                          - range_1000000_over
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            range_1000_below:
+                              type: number
+                              description: Exchange Outflow distribution value of which transferred xrp value is 1000 or less.
+                            range_1001_to_10000:
+                              type: number
+                              description: Exchange Outflow distribution value of which transferred xrp value is more than 1000 or less than 10000.
+                            range_10001_to_100000:
+                              type: number
+                              description: Exchange Outflow distribution value of which transferred xrp value is more than 10000 or less than 100000.
+                            range_100001_to_1000000:
+                              type: number
+                              description: Exchange Outflow distribution value of which transferred xrp value is more than 1000 or less than 100000.
+                            range_1000000_over:
+                              type: number
+                              description: Exchange Outflow distribution value of which transferred xrp value is 1000000 or more.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-15'
+                    range_1000_below: '4493.91763300'
+                    range_1001_to_10000: '21432.41498800'
+                    range_10001_to_100000: '71885.50688200'
+                    range_100001_to_1000000: '145003.40000000'
+                    range_1000000_over: 0E-8
+                  - date: '2026-06-14'
+                    range_1000_below: '10837.21058200'
+                    range_1001_to_10000: '14407.26021500'
+                    range_10001_to_100000: '171820.71000000'
+                    range_100001_to_1000000: 0E-8
+                    range_1000000_over: 0E-8
+      security:
+      - AccessToken: []
+  /xrp/flow-indicator/exchange-inflow-count-value-distribution:
+    get:
+      tags:
+      - XRP Flow Indicator
+      summary: Exchange Inflow Count Value Distribution
+      description: Exchange Inflow Count Value Distribution is a metric that shows the number of transactions of xrp tokens flowed into exchange wallets according to its value segment.
+      operationId: getExchangeInflowCountValueDistribution
+      parameters:
+      - description: An exchange from the table that we support. [See here](#tag/BTC-Exchange-Flows).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: binance
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-inflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: number of transactions of each exchange inflow's distribution band by the amount of the trasferred tokens(xrp) at once
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - range_1000_below
+                          - range_1001_to_10000
+                          - range_10001_to_100000
+                          - range_100001_to_1000000
+                          - range_1000000_over
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            range_1000_below:
+                              type: number
+                              description: Number of transactions of exchange inflow's value band of which transferred xrp value is 1000 or less.
+                            range_1001_to_10000:
+                              type: number
+                              description: Number of transactions of exchange inflow's value band of which transferred xrp value is more than 1000 or less than 10000.
+                            range_10001_to_100000:
+                              type: number
+                              description: Number of transactions of exchange inflow's value band of which transferred xrp value is more than 10000 or less than 100000.
+                            range_100001_to_1000000:
+                              type: number
+                              description: Number of transactions of exchange inflow's value band of which transferred xrp value is more than 1000 or less than 100000.
+                            range_1000000_over:
+                              type: number
+                              description: Number of transactions of exchange inflow's value band of which transferred xrp value is 1000000 or more.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-15'
+                    range_1000_below: 0
+                    range_1001_to_10000: 0
+                    range_10001_to_100000: 0
+                    range_100001_to_1000000: 2
+                    range_1000000_over: 0
+                  - date: '2026-06-14'
+                    range_1000_below: 1
+                    range_1001_to_10000: 0
+                    range_10001_to_100000: 1
+                    range_100001_to_1000000: 1
+                    range_1000000_over: 0
+      security:
+      - AccessToken: []
+  /xrp/flow-indicator/exchange-outflow-count-value-distribution:
+    get:
+      tags:
+      - XRP Flow Indicator
+      summary: Exchange Outflow Count Value Distribution
+      description: Exchange Outflow Count Value Distribution is a metric that shows the number of transactions of xrp tokens flowed into exchange wallets according to its value segment.
+      operationId: getExchangeOutflowCountValueDistribution
+      parameters:
+      - description: An exchange from the table that we support. [See here](#tag/BTC-Exchange-Flows).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: binance
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-outflow-count-value-distribution?exchange=binance&window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: number of transactions of each exchange outflow's distribution band by the amount of the trasferred tokens(xrp) at once
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - range_1000_below
+                          - range_1001_to_10000
+                          - range_10001_to_100000
+                          - range_100001_to_1000000
+                          - range_1000000_over
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            range_1000_below:
+                              type: number
+                              description: Number of transactions of exchange outflow's value band of which transferred xrp value is 1000 or less.
+                            range_1001_to_10000:
+                              type: number
+                              description: Number of transactions of exchange outflow's value band of which transferred xrp value is more than 1000 or less than 10000.
+                            range_10001_to_100000:
+                              type: number
+                              description: Number of transactions of exchange outflow's value band of which transferred xrp value is more than 10000 or less than 100000.
+                            range_100001_to_1000000:
+                              type: number
+                              description: Number of transactions of exchange outflow's value band of which transferred xrp value is more than 1000 or less than 100000.
+                            range_1000000_over:
+                              type: number
+                              description: Number of transactions of exchange outflow's value band of which transferred xrp value is 1000000 or more.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-15'
+                    range_1000_below: 35
+                    range_1001_to_10000: 4
+                    range_10001_to_100000: 3
+                    range_100001_to_1000000: 1
+                    range_1000000_over: 0
+                  - date: '2026-06-14'
+                    range_1000_below: 76
+                    range_1001_to_10000: 3
+                    range_10001_to_100000: 4
+                    range_100001_to_1000000: 0
+                    range_1000000_over: 0
+      security:
+      - AccessToken: []
+  /xrp/flow-indicator/exchange-supply-ratio:
+    get:
+      tags:
+      - XRP Flow Indicator
+      summary: Exchange Supply Ratio
+      description: 'The ratio of exchange''s xrp reserve compared to total supply of xrp.
+
+
+        **📖 Data Guide:** Exchange Supply Ratio — definition, interpretation, and chart examples.'
+      operationId: XRPFlowIndicatorgetExchangeSupplyRatio
+      parameters:
+      - description: An exchange from the table that we support. [See here](#tag/BTC-Exchange-Flows).
+        explode: false
+        in: query
+        name: exchange
+        required: true
+        schema:
+          type: string
+        style: form
+        example: binance
+      - description: Currently, we support `day` and `hour`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-supply-ratio?exchange=binance&window=day&from=20191001&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-supply-ratio?exchange=binance&window=day&from=20191001&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-supply-ratio?exchange=binance&window=day&from=20191001&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-supply-ratio?exchange=binance&window=day&from=20191001&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/xrp/flow-indicator/exchange-supply-ratio?exchange=binance&window=day&from=20191001&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: exchange supply ratio
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or hour, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - exchange_supply_ratio
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            exchange_supply_ratio:
+                              type: number
+                              description: exchange supply ratio
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    exchange_supply_ratio: 0.02690809
+                  - date: '2026-06-13'
+                    exchange_supply_ratio: 0.02690064
+      security:
+      - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For each API request, include this HTTP header:
+
+        `Authorization` with the `Bearer <YOUR_API_KEY>`. Bearer access token is the type of HTTP Authorization.  You have to include access token to the HTTP header and note that leading bearer is required.
+
+        You must include your access token in HTTP header in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.'
+    QueryParameter:
+      type: apiKey
+      name: api_key
+      in: query
+      description: 'For each API reqeust, include `api_key` parameter.
+
+        You must request with your access token in query parameter in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.
+
+        If you are using Excel, you can use the `api_key` parameter to request with your access token to return data either in `json` or `csv`.'
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Available Endpoints
+  - Supported Stablecoin List
+  - Supported ERC20 List
+  - Supported Alt List
+- name: Bitcoin
+  tags:
+  - BTC Entity Status
+  - BTC Exchange Flows
+  - BTC Flow Indicator
+  - BTC Market Indicator
+  - BTC Network Indicator
+  - BTC Miner Flows
+  - BTC Inter Entity Flows
+  - BTC Fund Data
+  - BTC Market Data
+  - BTC Miner Data
+  - BTC Network Data
+  - BTC Mempool Statistics
+  - BTC Lightning Statistics
+- name: Ethereum
+  tags:
+  - ETH Entity Status
+  - ETH Exchange Flows
+  - ETH Flow Indicator
+  - ETH Market Indicator
+  - ETH 2.0
+  - ETH Fund Data
+  - ETH Market Data
+  - ETH Network Data
+- name: XRP
+  tags:
+  - XRP Entity Status
+  - XRP Entity Flows
+  - XRP Flow Indicator
+  - XRP Market Data
+  - XRP Network Data
+  - XRP Network Indicator
+  - XRP Dex Data
+  - XRP AMM Data
+- name: TRX
+  tags:
+  - TRX Market Data
+  - TRX Network Data
+  - TRX DEFI
+- name: Stablecoin
+  tags:
+  - Stablecoin Entity Status
+  - Stablecoin Exchange Flows
+  - Stablecoin Flow Indicator
+  - Stablecoin Market Data
+  - Stablecoin Network Data
+- name: ERC20
+  tags:
+  - ERC20 Entity Status
+  - ERC20 Exchange Flows
+  - ERC20 Flow Indicator
+  - ERC20 Market Data
+  - ERC20 Network Data
+- name: Alt
+  tags:
+  - Alt Market Data
+- name: Utilities
+  tags:
+  - Latency

@@ -1,0 +1,2316 @@
+openapi: 3.2.0
+info:
+  version: 1.3.0
+  title: CryptoQuant Data BTC Network Data API
+  termsOfService: https://cryptoquant.com/terms-of-service
+  contact:
+    name: API Support
+    email: contact@cryptoquant.com
+  description: The CryptoQuant Data API provides simple and powerful endpoints to get information on general transaction data and aggregate on-chain statistics straight from the blockchain. The API root endpoint URL is `https://api.cryptoquant.com/v1/`.
+servers:
+- url: https://api.cryptoquant.com/v1
+  description: Default server
+tags:
+- name: BTC Network Data
+  description: Bitcoin on-chain network data including but not limited to token movements, fees, supply, address movements, etc. All metrics have data entries starting from the genesis block (block height 0, datetime 2009-01-03 18:15:05).
+paths:
+  /btc/network-data/supply:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Supply
+      description: This endpoint returns metrics related to bitcoin supply, i.e. the amount of bitcoin in existence. We currently provide two metrics, `supply_total` , the total amount of bitcoins in existence (sum of all bitcoins issued by the coinbase reward), and `supply_new`, the amount of newly issued tokens in a given window.
+      operationId: getSupply
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/supply?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/supply?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/supply?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/supply?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/supply?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: supply_total, supply_new
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - supply_total
+                          - supply_new
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            supply_total:
+                              type: number
+                              description: The total amount of BTC in existence.
+                            supply_new:
+                              type: number
+                              description: The sum of newly issued tokens in that window.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    supply_new: 456.25
+                    supply_total: 20042821.04
+                  - date: '2026-06-13'
+                    supply_new: 387.5
+                    supply_total: 20042364.79
+      security:
+      - AccessToken: []
+  /btc/network-data/velocity:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Velocity
+      description: This endpoint returns metrics related to the velocity of bitcoin. Bitcoin's velocity is calculated by dividing the trailing 1 year estimated transaction volume(the cumulated sum of transferred tokens) by current supply. Velocity is a metric that explains how actively is money circulating in the market.
+      operationId: getVelocity
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/velocity?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/velocity?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/velocity?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/velocity?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/velocity?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Estimated transaction volume in the trailing 1 year divided by current total supply.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - velocity_supply_total
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            velocity_supply_total:
+                              type: number
+                              description: Estimated transaction volume in the trailing 1 year divided by current total supply.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    velocity_supply_total: 13.303226
+                  - date: '2026-06-13'
+                    velocity_supply_total: 13.299656
+      security:
+      - AccessToken: []
+  /btc/network-data/transactions-count:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Transactions Count
+      description: This endpoint returns metrics related to the number of transactions. We provide several metrics, `transactions_count_total`, the total number of transactions, and `transactions_count_mean`, the mean number of transactions.
+      operationId: getTransactionsCount
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/transactions-count?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/transactions-count?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/transactions-count?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/transactions-count?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/transactions-count?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: transactions_count_total, transactions_count_mean
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - transactions_count_total
+                          - transactions_count_mean
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            transactions_count_total:
+                              type: number
+                              description: Total number of transactions whether they execute or not, and whether they result in the transfer of tokens or not.
+                            transactions_count_mean:
+                              type: number
+                              description: The mean of number transactions per block. For window=block, this value will be same as transactions_count_total.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    transactions_count_total: 726374
+                    transactions_count_mean: 4975.16
+                  - date: '2026-06-13'
+                    transactions_count_total: 550172
+                    transactions_count_mean: 4436.87
+      security:
+      - AccessToken: []
+  /btc/network-data/addresses-count:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Addresses Count
+      description: This endpoint returns metrics relating to the number of used bitcoin addresses. We provide several metrics, `addresses_count_active`, the total number of unique addresses that were active (either sender or receiver) on the blockchain, `addresses_count_sender`, the number of addresses that were active as a sender, and `addresses_count_receiver`, the number of addresses that were active as a receiver.
+      operationId: getAddressesCount
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/addresses-count?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/addresses-count?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/addresses-count?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/addresses-count?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/addresses-count?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: addresses_count_active, addresses_count_sender, addresses_count_receiver,
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - addresses_count_active
+                          - addresses_count_sender
+                          - addresses_count_receiver
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            addresses_count_active:
+                              type: number
+                              description: The total number of unique addresses that were active (either sender or receiver) on the blockchain in a given window.
+                            addresses_count_sender:
+                              type: number
+                              description: The number of addresses that were active as a sender.
+                            addresses_count_receiver:
+                              type: number
+                              description: The number of addresses that were active as a receiver.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    addresses_count_active: 530599
+                    addresses_count_receiver: 400724
+                    addresses_count_sender: 373693
+                  - date: '2026-06-13'
+                    addresses_count_active: 550172
+                    addresses_count_receiver: 423653
+                    addresses_count_sender: 381961
+      security:
+      - AccessToken: []
+  /btc/network-data/tokens-transferred:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Tokens Transferred
+      description: This endpoint returns metrics related to the number of tokens transferred, i.e transaction volume. We provide several metrics, `tokens_transferred_total`, the total number of transferred tokens, `tokens_transferred_mean`, the mean of number of transferred tokens per transaction, and `tokens_transferred_median`, the median of tokens transferred per transaction.
+      operationId: getTokensTransferred
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/tokens-transferred?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/tokens-transferred?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/tokens-transferred?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/tokens-transferred?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/tokens-transferred?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: tokens_transferred_total, tokens_transferred_mean, tokens_transferred_median
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - tokens_transferred_total
+                          - tokens_transferred_mean
+                          - tokens_transferred_median
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            tokens_transferred_total:
+                              type: number
+                              description: Total number of tokens transferred in that window.
+                            tokens_transferred_mean:
+                              type: number
+                              description: The mean of tokens transferred per transaction.
+                            tokens_transferred_median:
+                              type: number
+                              description: The median of tokens transferred per transaction.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    tokens_transferred_total: 434852.64
+                    tokens_transferred_mean: 0.59866218
+                    tokens_transferred_median: 0.000777
+                  - date: '2026-06-13'
+                    tokens_transferred_total: 451153.54
+                    tokens_transferred_mean: 0.82002272
+                    tokens_transferred_median: 0.001035
+      security:
+      - AccessToken: []
+  /btc/network-data/block-bytes:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Block Bytes
+      operationId: getBlockBytes
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/block-bytes?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/block-bytes?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/block-bytes?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/block-bytes?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/block-bytes?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      description: The mean size(in bytes) of all blocks generated.
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      responses:
+        '200':
+          description: The mean size(in bytes) of all blocks generated.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - data
+                    - window
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - block_bytes
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            block_bytes:
+                              type: integer
+                              description: The mean size(in bytes) of all blocks generated
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    block_bytes: 1589650.31
+                  - date: '2026-06-13'
+                    block_bytes: 1579676.05
+      security:
+      - AccessToken: []
+  /btc/network-data/block-count:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Block Count
+      description: The number of blocks generated in a given window.
+      operationId: getBlockCount
+      parameters:
+      - description: Currently, we support `day` and `hour`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/block-count?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/block-count?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/block-count?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/block-count?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/block-count?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: The number of blocks generated in a given window.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - data
+                    - window
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day or hour, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - block_count
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            block_count:
+                              type: integer
+                              description: The number of blocks generated in a given window.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    block_count: 146
+                  - date: '2026-06-13'
+                    block_count: 124
+      security:
+      - AccessToken: []
+  /btc/network-data/block-interval:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Block Interval
+      description: The average time between blocks generated displayed in seconds.
+      operationId: getBlockInterval
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/block-interval?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/block-interval?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/block-interval?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/block-interval?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/block-interval?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: The average time between  blocks generated in seconds.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - block_interval
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            block_interval:
+                              type: integer
+                              description: The average time between blocks generated in seconds.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    block_interval: 588.45890411
+                  - date: '2026-06-13'
+                    block_interval: 697.24193548
+      security:
+      - AccessToken: []
+  /btc/network-data/utxo-count:
+    get:
+      tags:
+      - BTC Network Data
+      summary: UTXO Count
+      description: The number of total number of unspent transaction outputs existing at the specified point.
+      operationId: getUTXOCount
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/utxo-count?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/utxo-count?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/utxo-count?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/utxo-count?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/utxo-count?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: Number of total number of unspent transaction outputs at a given period.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - utxo_count
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            utxo_count:
+                              type: integer
+                              description: Number of unspent transaction outputs.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    utxo_count: 165793937
+                  - date: '2026-06-13'
+                    utxo_count: 165787206
+      security:
+      - AccessToken: []
+  /btc/network-data/fees:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Fees
+      description: This endpoint returns the statistics related to fees that are paid to bitcoin miners. In general, fees are calculated by subtracting the newly issued bitcoin from the total block reward of each blocks. We provide three statistics, `fees_total`, the sum of all fees, `fees_block_mean`, the average fee per block, and `fees_reward_percent`, the percentage of fees relative to the total block reward. Additionally, these can be viewed in terms of USD.
+      operationId: getFees
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/fees?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/fees?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/fees?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/fees?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/fees?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: fees_total, fees_total_usd, fees_block_mean, fees_block_mean_usd, fees_reward_percent.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - fees_block_mean
+                          - fees_block_mean_usd
+                          - fees_total
+                          - fees_total_usd
+                          - fees_reward_percent
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            fees_block_mean:
+                              type: number
+                              description: The average fee per block.
+                            fees_block_mean_usd:
+                              type: number
+                              description: The average fee per block, calculated in USD.
+                            fees_total:
+                              type: number
+                              description: The sum of all fees that are paid to bitcoin miners.
+                            fees_total_usd:
+                              type: number
+                              description: The sum of all fees that are paid to bitcoin miners, calculated in USD.
+                            fees_reward_percent:
+                              type: number
+                              description: The percentage of fee in total block reward. Values are between 0 and 1.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    fees_block_mean: 0.01819619
+                    fees_block_mean_usd: 1171.29
+                    fees_reward_percent: 0.00578907
+                    fees_total: 2.65664341
+                    fees_total_usd: 171008.22
+                  - date: '2026-06-13'
+                    fees_block_mean: 0.02751413
+                    fees_block_mean_usd: 1759.71
+                    fees_reward_percent: 0.00872768
+                    fees_total: 3.41175237
+                    fees_total_usd: 218203.51
+      security:
+      - AccessToken: []
+  /btc/network-data/fees-transaction:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Fees Transaction
+      description: This endpoint returns the statistics related to fees per transaction that are paid to bitcoin miners. In general, fees are calculated by subtracting the newly issued bitcoin from the total block reward of each blocks, and this is divided by the number of transactions to calculate the average fee per transaction in each block. We provide two statistics, `fees_transaction_mean`, the average fee per transaction, `fees_transaction_median,` the median fee per transaction. Additionally, these values can be calculated in USD.
+      operationId: getFeesTransaction
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/fees-transaction?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/fees-transaction?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/fees-transaction?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/fees-transaction?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/fees-transaction?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: fees_transaction_mean, fees_transaction_mean_usd, fees_transaction_median, fees_transaction_median_usd
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - fees_transaction_mean
+                          - fees_transaction_mean_usd
+                          - fees_transaction_median
+                          - fees_transaction_median_usd
+                          - fees_reward_percent
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            fees_transaction_mean:
+                              type: number
+                              description: The average fee per transaction.
+                            fees_transaction_mean_usd:
+                              type: number
+                              description: The average fee per transaction, calculated in USD.
+                            fees_transaction_median:
+                              type: number
+                              description: The median fee per transaction.
+                            fees_transaction_median_usd:
+                              type: number
+                              description: The median fee per transaction, calculated in USD.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    fees_transaction_mean: 3.66e-06
+                    fees_transaction_mean_usd: 0.23542723
+                    fees_transaction_median: 8.5e-07
+                    fees_transaction_median_usd: 0.05556587
+                  - date: '2026-06-13'
+                    fees_transaction_mean: 6.2e-06
+                    fees_transaction_mean_usd: 0.39660962
+                    fees_transaction_median: 1.69e-06
+                    fees_transaction_median_usd: 0.108371
+      security:
+      - AccessToken: []
+  /btc/network-data/blockreward:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Blockreward
+      description: The sum of block rewards (including mining or staking rewards and transaction fees). We also provide this value in usd.
+      operationId: getBlockReward
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/blockreward?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/blockreward?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/blockreward?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/blockreward?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/blockreward?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: The sum of block rewards (including mining or staking rewards and transaction fees). We also provide this value in usd.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - blockreward
+                          - blockreward_usd
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            blockreward:
+                              type: number
+                              description: The sum of block rewards (including mining or staking rewards and transaction fees).
+                            blockreward_usd:
+                              type: number
+                              description: The sum of block rewards (including mining or staking rewards and transaction fees), calculated in USD.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    blockreward: 458.90664341
+                    blockreward_usd: 29534127.83
+                  - date: '2026-06-13'
+                    blockreward: 390.91175237
+                    blockreward_usd: 24978636.2
+      security:
+      - AccessToken: []
+  /btc/network-data/difficulty:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Difficulty
+      description: The mean difficulty of mining a new block.
+      operationId: getDifficulty
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/difficulty?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/difficulty?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/difficulty?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/difficulty?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/difficulty?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: The mean difficulty of mining a new block.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - difficulty
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            difficulty:
+                              type: number
+                              description: The mean difficulty of mining a new block.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    difficulty: 125124954924434.48
+                  - date: '2026-06-13'
+                    difficulty: 138955357012247.3
+      security:
+      - AccessToken: []
+  /btc/network-data/hashrate:
+    get:
+      tags:
+      - BTC Network Data
+      summary: Hashrate
+      description: The mean speed at which miners in the network are solving hash problems. It is displayed as hashes (Gigabytes) per second.
+      operationId: getHashrate
+      parameters:
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/network-data/hashrate?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/network-data/hashrate?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/network-data/hashrate?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/network-data/hashrate?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/network-data/hashrate?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      responses:
+        '200':
+          description: The mean speed at which hash problems are being solved across all miners in the network. It is displayed as hashes(Bytes) per second.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - window
+                    - data
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - hashrate
+                          properties:
+                            blockheight:
+                              type: string
+                              description: The height of the block. This optional field only appears when window=block is used.
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            datetime:
+                              type: string
+                              description: The date and time formatted as YYYY-MM-DD HH:MM:SS (UTC time). This field only appears when window=block is used.
+                            hashrate:
+                              type: number
+                              description: The mean of hashes that miners calculates per second across all miners in the network. (Bytes/Sec)
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    hashrate: 906725182399.03
+                  - date: '2026-06-13'
+                    hashrate: 856531024681.47
+      security:
+      - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For each API request, include this HTTP header:
+
+        `Authorization` with the `Bearer <YOUR_API_KEY>`. Bearer access token is the type of HTTP Authorization.  You have to include access token to the HTTP header and note that leading bearer is required.
+
+        You must include your access token in HTTP header in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.'
+    QueryParameter:
+      type: apiKey
+      name: api_key
+      in: query
+      description: 'For each API reqeust, include `api_key` parameter.
+
+        You must request with your access token in query parameter in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.
+
+        If you are using Excel, you can use the `api_key` parameter to request with your access token to return data either in `json` or `csv`.'
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Available Endpoints
+  - Supported Stablecoin List
+  - Supported ERC20 List
+  - Supported Alt List
+- name: Bitcoin
+  tags:
+  - BTC Entity Status
+  - BTC Exchange Flows
+  - BTC Flow Indicator
+  - BTC Market Indicator
+  - BTC Network Indicator
+  - BTC Miner Flows
+  - BTC Inter Entity Flows
+  - BTC Fund Data
+  - BTC Market Data
+  - BTC Miner Data
+  - BTC Network Data
+  - BTC Mempool Statistics
+  - BTC Lightning Statistics
+- name: Ethereum
+  tags:
+  - ETH Entity Status
+  - ETH Exchange Flows
+  - ETH Flow Indicator
+  - ETH Market Indicator
+  - ETH 2.0
+  - ETH Fund Data
+  - ETH Market Data
+  - ETH Network Data
+- name: XRP
+  tags:
+  - XRP Entity Status
+  - XRP Entity Flows
+  - XRP Flow Indicator
+  - XRP Market Data
+  - XRP Network Data
+  - XRP Network Indicator
+  - XRP Dex Data
+  - XRP AMM Data
+- name: TRX
+  tags:
+  - TRX Market Data
+  - TRX Network Data
+  - TRX DEFI
+- name: Stablecoin
+  tags:
+  - Stablecoin Entity Status
+  - Stablecoin Exchange Flows
+  - Stablecoin Flow Indicator
+  - Stablecoin Market Data
+  - Stablecoin Network Data
+- name: ERC20
+  tags:
+  - ERC20 Entity Status
+  - ERC20 Exchange Flows
+  - ERC20 Flow Indicator
+  - ERC20 Market Data
+  - ERC20 Network Data
+- name: Alt
+  tags:
+  - Alt Market Data
+- name: Utilities
+  tags:
+  - Latency

@@ -46,16 +46,16 @@ specificationVersion: '0.23'
 created: '2025-02-12'
 modified: '2026-05-19'
 apis:
-- aid: cryptoquant:cryptoquant-exchange-flows-api
-  name: CryptoQuant Exchange Flows API
-  description: Inflow, outflow, and reserve metrics for major exchanges.
+- aid: cryptoquant:cryptoquant-alt-market-data-api
+  name: CryptoQuant Alt Market Data API
+  description: This namespace contains endpoints to retrieve metrics related to the value of tokens.
   humanURL: https://cryptoquant.com/docs
   baseURL: https://api.cryptoquant.com/v1
   tags:
-  - Exchange Flows
+  - Alt Market Data
   properties:
   - type: OpenAPI
-    url: openapi/cryptoquant-exchange-flows-api-openapi.yml
+    url: openapi/cryptoquant-alt-market-data-api-openapi.yml
   - type: Documentation
     url: https://cryptoquant.com/docs
   - type: Pricing
@@ -64,16 +64,16 @@ apis:
     url: json-schema/cryptoquant-timeseries-schema.json
   - type: JSONLDContext
     url: json-ld/cryptoquant-context.jsonld
-- aid: cryptoquant:cryptoquant-market-data-api
-  name: CryptoQuant Market Data API
-  description: Price, open interest, and derivatives metrics.
+- aid: cryptoquant:cryptoquant-available-endpoints-api
+  name: CryptoQuant Available Endpoints API
+  description: Discover all available endpoints
   humanURL: https://cryptoquant.com/docs
   baseURL: https://api.cryptoquant.com/v1
   tags:
-  - Market Data
+  - Available Endpoints
   properties:
   - type: OpenAPI
-    url: openapi/cryptoquant-market-data-api-openapi.yml
+    url: openapi/cryptoquant-available-endpoints-api-openapi.yml
   - type: Documentation
     url: https://cryptoquant.com/docs
   - type: Pricing
@@ -82,16 +82,16 @@ apis:
     url: json-schema/cryptoquant-timeseries-schema.json
   - type: JSONLDContext
     url: json-ld/cryptoquant-context.jsonld
-- aid: cryptoquant:cryptoquant-miner-api
-  name: CryptoQuant Miner API
-  description: Miner reserve, position index, and outflow metrics.
+- aid: cryptoquant:cryptoquant-btc-entity-status-api
+  name: CryptoQuant BTC Entity Status API
+  description: Entity List of Bitcoin API with Status
   humanURL: https://cryptoquant.com/docs
   baseURL: https://api.cryptoquant.com/v1
   tags:
-  - Miner
+  - BTC Entity Status
   properties:
   - type: OpenAPI
-    url: openapi/cryptoquant-miner-api-openapi.yml
+    url: openapi/cryptoquant-btc-entity-status-api-openapi.yml
   - type: Documentation
     url: https://cryptoquant.com/docs
   - type: Pricing
@@ -100,18 +100,54 @@ apis:
     url: json-schema/cryptoquant-timeseries-schema.json
   - type: JSONLDContext
     url: json-ld/cryptoquant-context.jsonld
-- aid: cryptoquant:cryptoquant-on-chain-api
-  name: CryptoQuant On-Chain API
-  description: Network indicators including SOPR, MVRV, NVT, and active addresses.
+- aid: cryptoquant:cryptoquant-btc-exchange-flows-api
+  name: CryptoQuant BTC Exchange Flows API
+  description: >-
+    This endpoint returns the flows of BTC into exchange wallets for as far back as we track.
+
+    We constantly keep updating new exchange wallets, which means that there can be slight modification
+    in values especially for recent data points.
+
+    The update is done in periodic and automatic way: Tuesday 00:00 UTC every week.
+
+    Supported exchanges can be found in the `/btc/status/entity-list` endpoint.
+
+    In addition to that, we support the following aggregated exchanges:
+
+
+    <br/>
+
+
+    ### Supported Aggregated Exchanges
+
+    | Name           |   Exchange     |   Status    |
+
+    |----------------|--------------|-------------|
+
+    | All Exchanges  | `all_exchange`  | Validated   |
+
+    | Spot Exchanges  | `spot_exchange`  | Validated   |
+
+    | Derivative Exchanges  | `derivative_exchange`  | Validated   |
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new exchange wallets are discovered, added,
+    and validated.
+
+
+
+    <br/>
   humanURL: https://cryptoquant.com/docs
   baseURL: https://api.cryptoquant.com/v1
   tags:
-  - Onchain
-  tags_raw:
-  - On-Chain
+  - BTC Exchange Flows
   properties:
   - type: OpenAPI
-    url: openapi/cryptoquant-on-chain-api-openapi.yml
+    url: openapi/cryptoquant-btc-exchange-flows-api-openapi.yml
   - type: Documentation
     url: https://cryptoquant.com/docs
   - type: Pricing
@@ -120,16 +156,1202 @@ apis:
     url: json-schema/cryptoquant-timeseries-schema.json
   - type: JSONLDContext
     url: json-ld/cryptoquant-context.jsonld
-- aid: cryptoquant:cryptoquant-stablecoins-api
-  name: CryptoQuant Stablecoins API
-  description: Stablecoin supply ratio and exchange metrics.
+- aid: cryptoquant:cryptoquant-btc-flow-indicator-api
+  name: CryptoQuant BTC Flow Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve Fund Flow ratio, Miners' Position Index(MPI), and etc.
+    We provide certain indicators to avoid any risks, assume upside or downside potentials, and give insights
+    on the value of bitcoin. For more detailed information, please refer to the description of each metric.
+
+
+    <br/>
+
+
+    > **Note:**  This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new exchange wallets are discovered, added,
+    and validated.
+
+
+    <br/>
   humanURL: https://cryptoquant.com/docs
   baseURL: https://api.cryptoquant.com/v1
   tags:
-  - Stablecoins
+  - BTC Flow Indicator
   properties:
   - type: OpenAPI
-    url: openapi/cryptoquant-stablecoins-api-openapi.yml
+    url: openapi/cryptoquant-btc-flow-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-fund-data-api
+  name: CryptoQuant BTC Fund Data API
+  description: >-
+    This namespace cointains endpoints to retreive metrics related to regulated funds such as trust, including
+    market price, market volume, market premium, and digital asset holdings. These metrics are useful
+    to measure sentiments of investors such as institutions in regulated market. All Symbol will be updated
+    no later then UTC 12:00, this may be changed depending on update time of source data. Also the return
+    value may be changed because of late updated fund.
+
+
+    <br/>
+
+
+    ### Supported Symbols
+
+    | Name                                        | Symbol      |   Status    |  Source               |
+
+    |---------------------------------------      |-------------|-------------|-----------------------|
+
+    | All Symbol (BTC)                            | `all_symbol`| Validated   | All Fund |
+
+    | Grayscale Bitcoin Trust (GBTC)              | `gbtc`      | Validated   | Grayscale Investments
+    |
+
+    | Grayscale Bitcoin Mini Trust (BTC)          | `btc`       | Validated   | Grayscale Investments
+    |
+
+    | iShares Bitcoin Trust ETF (IBIT)            | `ibit`      | Validated   | BlackRock |
+
+    | Fidelity Bitcoin Fund ETF (FBTC)            | `fbtc`      | Validated   | Fidelity |
+
+    | Bitwise Bitcoin ETF (BITB)                  | `bitb`      | Validated   | Bitwise |
+
+    | ARK 21Shares Bitcoin ETF (ARKB)             | `arkb`      | Validated   | ARK Investment / 21Shares
+    |
+
+    | Invesco Galaxy Bitcoin ETF (BTCO)           | `btco`      | Validated   | Invesco |
+
+    | VanEck Bitcoin Trust (HODL)                 | `hodl`      | Validated   | VanEck |
+
+    | Franklin Bitcoin ETF (EZBC)                 | `ezbc`      | Validated   | Franklin Templeton |
+
+    | WisdomTree Bitcoin Fund (BTCW)              | `btcw`      | Validated   | WisdomTree |
+
+    | The Coinshares Valkyrie Bitcoin Fund (BRRR) | `brrr`      | Validated   | Valkyrie |
+
+    | Purpose Bitcoin ETF (BTCC.U)                | `btcc_u`    | Validated   | Purpose Investments |
+
+    | ETC Group Bitcoin ETF (BTCE)                | `btce`      | Validated   | ETC Group |
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Fund Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-fund-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-inter-entity-flows-api
+  name: CryptoQuant BTC Inter Entity Flows API
+  description: >-
+    This namespace contains endpoints to retrieve inter entity flows data (e.g. flow between miners and
+    exchanges). Data entries were collected from the first transaction between two entities.
+
+    We constantly keep updating new entity wallets, which means that there can be slight modification
+    in values especially for recent data points.
+
+    The update is done in periodic and automatic way: Tuesday 00:00 UTC every week.
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new entity wallets are discovered, added,
+    and validated.
+
+
+    <br/>
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Inter Entity Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-inter-entity-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-lightning-statistics-api
+  name: CryptoQuant BTC Lightning Statistics API
+  description: >-
+    This namespace contains endpoints to retrieve statistics on Lightning Network. We provide certain
+    metrics such as the number of channel, nodes and network capacity from lightning network.
+
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Lightning Statistics
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-lightning-statistics-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-market-data-api
+  name: CryptoQuant BTC Market Data API
+  description: >-
+    This namespace contains endpoints to retrieve metrics related to the value of Bitcoin, including price,
+    open interest, market cap, realized cap, etc. On top of providing basic market data like price and
+    market cap, we focus on onchain indicators in order to evaluate the true value of Bitcoin. These indicators
+    have been commonly used in building long term valuations, and identifying lows and highs. For more
+    detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-market-indicator-api
+  name: CryptoQuant BTC Market Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve MVRV(Market-Value-to-Realized-Value), Estimated Leverage
+    Ratio, and etc. We provide certain indicators to avoid any risks, assume upside or downside potentials,
+    and give insights on the value of bitcoin.
+
+    We also provide USD and USDT spot price of BTC from global exchanges and BTC index price. CryptoQuant's
+    BTC index price is VWAP(Volume Weighted Average Price) of aggregated price data from all exchanges
+    we provide.
+
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Market Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-market-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-mempool-statistics-api
+  name: CryptoQuant BTC Mempool Statistics API
+  description: >-
+    This namespace contains endpoints to retrieve statistics on Memory Pool in Bitcoin network. We provide
+    certain metrics such as transaction count, total transaction size, total transaction fee on memory
+    pool, based on fee range, including aggregated metrics.
+
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Mempool Statistics
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-mempool-statistics-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-miner-data-api
+  name: CryptoQuant BTC Miner Data API
+  description: >-
+    This namespace contains endpoints to retrieve statistics on Bitcoin miners. We provide certain metrics
+    such as rewards from coinbase or miners, the number of production reported from miners, the number
+    of transaction and the number of address
+     For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Miner Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-miner-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-miner-flows-api
+  name: CryptoQuant BTC Miner Flows API
+  description: >-
+    This namespace contains endpoints to retrieve data related to Bitcoin miners(i.e. mining pools and
+    its participants). We provide metrics related to miner reserves, inflows, outflows, hashrate, revenue,
+    workers, etc.
+
+    We constantly keep updating new miner wallets, which means that there can be slight modification in
+    values especially for recent data points.
+
+    The update is done in periodic and automatic way: Tuesday 00:00 UTC every week.
+
+    Supported miners can be found in the `/btc/status/entity-list` endpoint.
+
+    In addition to that, we support the following aggregated miners:
+
+
+    <br/>
+
+
+    ### Supported Aggregated Miners
+
+
+    | Name           |   Miner     |   Status    |
+
+    |----------------|--------------|-------------|
+
+    | All Miners     | `all_miner`    | Validated   |
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new miners wallets are discovered, added,
+    and validated.
+
+
+    <br/>
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Miner Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-miner-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-network-data-api
+  name: CryptoQuant BTC Network Data API
+  description: >-
+    Bitcoin on-chain network data including but not limited to token movements, fees, supply, address
+    movements, etc. All metrics have data entries starting from the genesis block (block height 0, datetime
+    2009-01-03 18:15:05).
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Network Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-network-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-btc-network-indicator-api
+  name: CryptoQuant BTC Network Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve NVT ratio, Stock to Flow ratio, and etc. We provide
+    certain indicators to avoid any risks, assume upside or downside potentials, and give insights on
+    the value of bitcoin. For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - BTC Network Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-btc-network-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-erc20-entity-status-api
+  name: CryptoQuant ERC20 Entity Status API
+  description: Entity List of ERC20 API with Status
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ERC20 Entity Status
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-erc20-entity-status-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-erc20-exchange-flows-api
+  name: CryptoQuant ERC20 Exchange Flows API
+  description: >-
+    This endpoint returns the flows of ERC20 tokens into exchange wallets for as far back as we track.
+    Please note that the transfer generally occurs after a certain amount of time from the contract created
+    time.
+
+    We constantly keep updating new exchange wallets, which means that there can be slight modification
+    in values especially for recent data points.
+
+    The update is done in periodic and automatic way: Tuesday 00:00 UTC every week.
+
+    Supported exchanges can be found in the `/erc20/status/entity-list` endpoint.
+
+    In addition to that, we support the following aggregated exchanges:
+
+
+    <br/>
+
+
+    ### Supported Aggregated Exchanges
+
+    | Name       |   Exchange       | Supported ERC20 Tokens |
+
+    |----------------|----------------|-------------------------------|
+
+    |   All Exchanges  | `all_exchange` | All Tokens |
+
+    |   Spot Exchanges  | `spot_exchange` | All Tokens |
+
+    |   Derivative Exchanges  | `derivative_exchange` | All Tokens |
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new exchange wallets are discovered, added,
+    and validated.
+
+
+    <br/>
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ERC20 Exchange Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-erc20-exchange-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-erc20-flow-indicator-api
+  name: CryptoQuant ERC20 Flow Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve entity flow based indicators.
+
+    We provide certain indicators to avoid any risks, assume upside or downside potentials, and give insights
+    on the value of bitcoin.
+
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ERC20 Flow Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-erc20-flow-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-erc20-market-data-api
+  name: CryptoQuant ERC20 Market Data API
+  description: This namespace contains endpoints to retrieve metrics related to the value of tokens.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ERC20 Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-erc20-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-erc20-network-data-api
+  name: CryptoQuant ERC20 Network Data API
+  description: The ERC20 Network Data API from CryptoQuant — 6 operation(s) for erc20 network data.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ERC20 Network Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-erc20-network-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-2-0-api
+  name: CryptoQuant ETH 2.0 API
+  description: >-
+    Genesis event of ETH 2.0 requires at least 16,384 of 32-ETH validator deposits seven days before Dec
+    1. If not, the genesis event would postpone seven days after. We have only valid transactions in the
+    calculations. Looking at the ETH2 deposit contract, Only from 32 to 1000 deposits are considered as
+    valid deposits.
+
+    When Phase 0 success rate hits 100% and Phase 0 unique validator hits 16,384, the Ethereum genesis
+    event starts.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH 2.0
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-2-0-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-entity-status-api
+  name: CryptoQuant ETH Entity Status API
+  description: Entity List of Ethereum API with Status
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Entity Status
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-entity-status-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-exchange-flows-api
+  name: CryptoQuant ETH Exchange Flows API
+  description: >-
+    This endpoint returns the flows of ETH into exchange wallets for as far back as we track.
+
+    We constantly keep updating new exchange wallets, which means that there can be slight modification
+    in values especially for recent data points.
+
+    The update is done in periodic and automatic way: Tuesday 00:00 UTC every week.
+
+    Supported exchanges can be found in the `/eth/status/entity-list` endpoint.
+
+    In addition to that, we support the following aggregated exchanges:
+
+
+    <br/>
+
+
+    ### Supported Aggregated Exchanges
+
+    | Name           |   Exchange     |   Status    |
+
+    |----------------|--------------|-------------|
+
+    | All Exchanges  | `all_exchange`  | Validated   |
+
+    | Spot Exchanges  | `spot_exchange`  | Validated   |
+
+    | Derivative Exchanges  | `derivative_exchange`  | Validated   |
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new exchange wallets are discovered, added,
+    and validated.
+
+
+    <br/>
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Exchange Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-exchange-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-flow-indicator-api
+  name: CryptoQuant ETH Flow Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve entity flow based indicators. We provide certain indicators
+    to avoid any risks, assume upside or downside potentials, and give insights on the value of bitcoin.
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Flow Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-flow-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-fund-data-api
+  name: CryptoQuant ETH Fund Data API
+  description: >-
+    This namespace cointains endpoints to retreive metrics related to regulated funds such as trust, including
+    market price, market volume, market premium, and digital asset holdings. These metrics are useful
+    to measure sentiments of investors such as institutions in regulated market. All Symbol will be updated
+    no later then UTC 12:00, this may be changed depending on update time of source data. Also the return
+    value may be changed because of late updated fund.
+
+
+    <br/>
+
+
+    ### Supported Symbols
+
+    | Name                                  | Symbol      |   Status    |  Source               |
+
+    |---------------------------------------|-------------|-------------|-----------------------|
+
+    | All Symbol (ETH)                      | `all_symbol`| Validated   | All Fund |
+
+    | Grayscale Ethereum Trust (ETHE)       | `ethe`      | Validated   | Grayscale Investments |
+
+    | Grayscale Ethereum Mini Trust (ETH)   | `eth`       | Validated   | Grayscale Investments |
+
+    | iShares Ethereum Trust ETF (ETHA)     | `etha`      | Validated   | BlackRock |
+
+    | Fidelity Ethereum Fund ETF (FETH)     | `feth`      | Validated   | Fidelity |
+
+    | Bitwise Ethereum ETF (ETHW)           | `ethw`      | Validated   | Bitwise |
+
+    | 21Shares Ethereum Core ETP (CETH)     | `ceth`      | Validated   | 21Shares |
+
+    | Invesco Galaxy Ethereum ETF (QETH)    | `qeth`      | Validated   | Invesco |
+
+    | VanEck Ethereum ETF (ETHV)            | `ethv`      | Validated   | VanEck |
+
+    | Franklin Ethereum ETF (EZET)          | `ezet`      | Validated   | Franklin Templeton |
+
+    | Purpose Ether ETF (ETHH.U)            | `ethh_u`    | Validated   | Purpose Investments |
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Fund Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-fund-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-market-data-api
+  name: CryptoQuant ETH Market Data API
+  description: >-
+    This namespace contains endpoints to retrieve metrics related to the value of ETH including price,
+    etc.
+
+    We provide USD and USDT spot price of ETH from global exchanges and ETH index price. CryptoQuant's
+    ETH index price is VWAP(Volume Weighted Average Price) of aggregated price data from all exchanges
+    we provide.
+
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-market-indicator-api
+  name: CryptoQuant ETH Market Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve Estimated Leverage Ratio. We provide certain indicators
+    to avoid any risks, assume upside or downside potentials, and give insights on the value of ethereum.
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Market Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-market-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-eth-network-data-api
+  name: CryptoQuant ETH Network Data API
+  description: >-
+    Ethereum on-chain network data including but not limited to token movements, fees, supply, address
+    movements, etc. All metrics have data entries starting from the genesis block (block height `0`, datetime
+    `2015-07-30 15:26:13`).
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - ETH Network Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-eth-network-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-latency-api
+  name: CryptoQuant Latency API
+  description: >-
+    Data freshness. Append `/latency` to any v1 data endpoint to see how long after a block its data becomes
+    collectable and fully processed.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Latency
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-latency-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-stablecoin-entity-status-api
+  name: CryptoQuant Stablecoin Entity Status API
+  description: Entity List of Stablecoin API with Status
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Stablecoin Entity Status
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-stablecoin-entity-status-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-stablecoin-exchange-flows-api
+  name: CryptoQuant Stablecoin Exchange Flows API
+  description: >-
+    This endpoint returns the flows of Stablecoin tokens into exchange wallets for as far back as we track.
+    Please note that the transfer generally occurs after a certain amount of time from the contract created
+    time.
+
+    We constantly keep updating new exchange wallets, which means that there can be slight modification
+    in values especially for recent data points.
+
+    The update is done in periodic and automatic way: Tuesday 00:00 UTC every week.
+
+    Supported exchanges can be found in the `/stablecoin/status/entity-list` endpoint.
+
+    In addition to that, we support the following aggregated exchanges:
+
+
+    <br/>
+
+
+    ### Supported Aggregated Exchanges
+
+    | Name       |   Exchange       | Supported Stablecoins |
+
+    |----------------|----------------|-------------------------------|
+
+    |   All Exchanges| `all_exchange` | All Tokens |
+
+    | Spot Exchanges  | `spot_exchange`  | All Tokens   |
+
+    | Derivative Exchanges  | `derivative_exchange`  | All Tokens   |
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new exchange wallets are discovered, added,
+    and validated.
+
+
+    <br/>
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Stablecoin Exchange Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-stablecoin-exchange-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-stablecoin-flow-indicator-api
+  name: CryptoQuant Stablecoin Flow Indicator API
+  description: >-
+    This namespace contains endpoints to retrieve entity flow based indicators. We provide certain indicators
+    to avoid any risks, assume upside or downside potentials, and give insights on the value of bitcoin.
+    For more detailed information, please refer to the description of each metric.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Stablecoin Flow Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-stablecoin-flow-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-stablecoin-market-data-api
+  name: CryptoQuant Stablecoin Market Data API
+  description: >-
+    This namespace contains endpoints to retrieve metrics related to the value of tokens, including price,
+    market cap, etc.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Stablecoin Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-stablecoin-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-stablecoin-network-data-api
+  name: CryptoQuant Stablecoin Network Data API
+  description: >-
+    This namespace contains endpoint to retrieve on-chain network data for stablecoins including token
+    transfers, issuance, addresses, etc. The earliest data point of each token is listed as Contract Created
+    Datetime. [here](#tag/Stablecoin Status)
+
+    ### Stablecoin Issuing Mechanism
+
+    Each individual Stablecoin is created by an issuing company and each of these companies operates with
+    a different issue mechanism.
+
+    There are many of these but the two most common are as follows.
+
+    #### Example 1
+
+    ![Ussuing Methodology 1](/docs/images/stable1.png)
+
+    Before providing clients with the granting address, the issuing company holds a treasury address.
+    Through the contract, the tokens are minted and held in the treasury address. Once the client sends
+    fiat currency, the clients tokens are moved from the treasury address to the client address and the
+    tokens are listed as being issued.
+
+    Conversely, when redeeming tokens for fiat, the tokens are sent to the treasury address and redeemed.
+    This won't be reflected in the supply unless these tokens are burned using a contract by the issuing
+    company. The circulating supply is calculated as tokens that have been issued to clients, ignoring
+    the supply held in the issuing company wallets.
+
+    #### Example 2
+
+    ![Ussuing Methodology 2](/docs/images/stable2.png)
+
+    In this method, there is no separate treasury address. After confirming the deposit of fiat, tokens
+    are minted from the contract address and delivered directly to the client address. Minting and issuance
+    occur simultaneously. When clients redeem tokens, the burn and redemption also are simultaneous.
+
+    This means that with this method, total supply and circulating supply will be the same. There are
+    various methods for Stablecoin issuance, and we calculated supply and locate significant transactions.  based
+    upon these types of factors. In the future, mint/issue/burn/redeem will be added our available metrics
+    and will be defined as listed below.
+
+    #### Terminology
+
+    | Term           |   Definition  |
+
+    |----------------|---------------|
+
+    | Mint           |  Mint is a creation of new tokens that add to the supply. When tokens are minted,
+    the total supply will increase.|
+
+    | Issue          |  Issue is when tokens are delivered to clients after deposit of fiat has been confirmed.
+    When tokens are issued, the circulating supply will increase.|
+
+    | Burn           |  Burn is a revocation of currently existing tokens that results in a decreased
+    supply. The opposite of Mint.|
+
+    | Redeem         |  Redeem is an exchange of tokens for deposited fiat that results in a decrease
+    in the circulating supply. The opposite of Issue.|
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - Stablecoin Network Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-stablecoin-network-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-trx-defi-api
+  name: CryptoQuant TRX DEFI API
+  description: The TRX DEFI API from CryptoQuant — 2 operation(s) for trx defi.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - TRX DEFI
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-trx-defi-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-trx-market-data-api
+  name: CryptoQuant TRX Market Data API
+  description: This namespace contains endpoints to retrieve metrics related to TRX Market Data.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - TRX Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-trx-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-trx-network-data-api
+  name: CryptoQuant TRX Network Data API
+  description: This namespace contains endpoints to retrieve metrics related to TRX Network Data.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - TRX Network Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-trx-network-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-amm-data-api
+  name: CryptoQuant XRP AMM Data API
+  description: >-
+    This namespace contains endpoints to retrieve metrics related to XRP AMM Data.
+
+
+    <br/>
+
+
+    ### Supported AMM Pairs
+
+
+    | Name           |     AMM Account   |   AMM     |   Status    |
+
+    |----------------|-------------|--------------|-------------|
+
+    | MAG/XRP     |`rNZ2ZVF1ZU34kFQvcN4xkFAvdSvve5bXce`| `mag-xrp`    | Validated   |
+
+    | XGO/XRP     |`rLeAEvRQ5RnN6LJnZ29Xw4pboWfKqYut3c`| `xgo-xrp`    | Validated   |
+
+    | SOLO/XRP     |`rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo`| `solo-xrp`    | Validated   |
+
+    | USDC/XRP     |`rGHt6LT5v9DVaEAmFzj5ciuxuj41ZjLofs`| `usdc-xrp`    | Validated   |
+
+    | BTC/XRP     |`rQBeAghWHEwWvKShryBSa5yR3VRX9oyQ5T`| `btc-xrp`    | Validated   |
+
+    | USD/XRP     |`rHUpaqUPbwzKZdzQ8ZQCme18FrgW9pB4am`| `usd-xrp`    | Validated   |
+
+    | XPM/XRP     |`rakZprdzwsUJ1rD2ouhYYAVP7tPbhrCbtz`| `xpm-xrp`    | Validated   |
+
+    | CSC/XRP     |`rf7g4JWCxu9oE1MKsWTihL9whY75AphCaV`| `csc-xrp`    | Validated   |
+
+    | RLT/XRP     |`rwzCasMZW2WisfohuMCVWdDD58HK9QtDyC`| `rlt-xrp`    | Validated   |
+
+    | CORE/XRP     |`rBu4LXTxM9cfs3JsFCuDbPMzvGBDR66wpi`| `core-xrp`    | Validated   |
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP AMM Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-amm-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-dex-data-api
+  name: CryptoQuant XRP Dex Data API
+  description: This namespace contains endpoints to retrieve metrics related to XRP Dex.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Dex Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-dex-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-entity-flows-api
+  name: CryptoQuant XRP Entity Flows API
+  description: >-
+    This namespace contains endpoints to retrieve metrics related to XRP Entity Flows.
+
+    Currently, We only supports Exchanges for available entities
+
+
+    ### Supported Exchanges
+
+    | Name       |
+
+    |------------|
+
+    | Binance    |
+
+    | Bitfinex   |
+
+    | Bitget     |
+
+    | Bithumb    |
+
+    | Bitstamp   |
+
+    | Bybit      |
+
+    | Gate.io    |
+
+    | HTX Global |
+
+    | Kucoin     |
+
+    | OKX        |
+
+    | Upbit      |
+
+
+    <br/>
+
+
+    > **Note:** This endpoint does not support Point-In-Time (PIT) accuracy due to periodic updates to
+    wallet address clustering. Historical data may change as new exchange wallets are discovered, added,
+    and validated.
+
+
+    <br/>
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Entity Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-entity-flows-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-entity-status-api
+  name: CryptoQuant XRP Entity Status API
+  description: The XRP Entity Status API from CryptoQuant — 1 operation(s) for xrp entity status.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Entity Status
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-entity-status-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-flow-indicator-api
+  name: CryptoQuant XRP Flow Indicator API
+  description: This namespace contains endpoints to retrieve metrics related to XRP Flow Indicators.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Flow Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-flow-indicator-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-market-data-api
+  name: CryptoQuant XRP Market Data API
+  description: This namespace contains endpoints to retrieve metrics related to XRP Market Data.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Market Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-market-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-network-data-api
+  name: CryptoQuant XRP Network Data API
+  description: This namespace contains endpoints to retrieve metrics related to XRP Network Data.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Network Data
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-network-data-api-openapi.yml
+  - type: Documentation
+    url: https://cryptoquant.com/docs
+  - type: Pricing
+    url: https://cryptoquant.com/products/api
+  - type: JSONSchema
+    url: json-schema/cryptoquant-timeseries-schema.json
+  - type: JSONLDContext
+    url: json-ld/cryptoquant-context.jsonld
+- aid: cryptoquant:cryptoquant-xrp-network-indicator-api
+  name: CryptoQuant XRP Network Indicator API
+  description: This namespace contains endpoints to retrieve metrics related to XRP Network Indicators.
+  humanURL: https://cryptoquant.com/docs
+  baseURL: https://api.cryptoquant.com/v1
+  tags:
+  - XRP Network Indicator
+  properties:
+  - type: OpenAPI
+    url: openapi/cryptoquant-xrp-network-indicator-api-openapi.yml
   - type: Documentation
     url: https://cryptoquant.com/docs
   - type: Pricing

@@ -1,0 +1,367 @@
+openapi: 3.2.0
+info:
+  version: 1.3.0
+  title: CryptoQuant Data BTC Miner Data API
+  termsOfService: https://cryptoquant.com/terms-of-service
+  contact:
+    name: API Support
+    email: contact@cryptoquant.com
+  description: The CryptoQuant Data API provides simple and powerful endpoints to get information on general transaction data and aggregate on-chain statistics straight from the blockchain. The API root endpoint URL is `https://api.cryptoquant.com/v1/`.
+servers:
+- url: https://api.cryptoquant.com/v1
+  description: Default server
+tags:
+- name: BTC Miner Data
+  description: 'This namespace contains endpoints to retrieve statistics on Bitcoin miners. We provide certain metrics such as rewards from coinbase or miners, the number of production reported from miners, the number of transaction and the number of address
+
+    For more detailed information, please refer to the description of each metric.'
+paths:
+  /btc/miner-data/companies:
+    get:
+      tags:
+      - BTC Miner Data
+      summary: Companies
+      operationId: getCompanies
+      x-codeSamples:
+      - lang: Shell
+        source: 'curl -X GET "https://api.cryptoquant.com/v1/btc/miner-data/companies?window=day&limit=2" \
+
+          -H "Authorization: Bearer <YOUR_API_KEY>"'
+      - lang: JavaScript
+        source: "fetch(\"https://api.cryptoquant.com/v1/btc/miner-data/companies?window=day&limit=2\", { headers: { \"Authorization\": \"Bearer <YOUR_API_KEY>\"} })\n  .then(response => response.json())\n  .then(data => console.log(data))"
+      - lang: NodeJS
+        source: "require('axios')\n  .get(\"https://api.cryptoquant.com/v1/btc/miner-data/companies?window=day&limit=2\", { headers: { Authorization: 'Bearer <YOUR_API_KEY>' } })\n  .then(response => console.log(response))"
+      - lang: Ruby
+        source: 'require ''net/http''
+
+          uri = URI("https://api.cryptoquant.com/v1/btc/miner-data/companies?window=day&limit=2")
+
+          req = Net::HTTP::Get.new(uri)
+
+          req["Authorization"] = "Bearer <YOUR_API_KEY>"
+
+          res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+
+          puts res.body'
+      - lang: Python
+        source: 'import requests
+
+          headers = {''Authorization'': ''Bearer <YOUR_API_KEY>''}
+
+          url = "https://api.cryptoquant.com/v1/btc/miner-data/companies?window=day&limit=2"
+
+          print(requests.get(url, headers=headers).json())'
+      description: 'This endpoint returns BTC mining company data.
+
+        Company data consists of statistical metrics based on rewards and production data for each mining company.
+
+        `coinbase_rewards`, The daily amount of Bitcoin mined directly from a coinbase transaction. And `coinbase_rewards` will only be added to `mara`.
+
+        `other_mining_rewards`, The daily amount of Bitcoin received as payment from a mining pool. Tipically, mining pools pay miners with Bitcoin from a coinbase transaction.
+
+        `total_rewards`, The daily sum of coinbase rewards and other mining rewards (in number of Bitcoin).
+
+        `accumulated_monthly_rewards`, The daily running sum of total rewards in each month (in number of Bitcoin).
+
+        `unique_txn`, The total number of Bitcoin transactions involving a mining reward.
+
+        `active_address_count`, The number of addresses from a company that received a block reward each day.
+
+        `reported_production`, The company''s reported total monthly production (in number of Bitcoin).
+
+        `report_accuracy`, The ratio of accumulated monthly rewards to reported production times 100. It represents the % of total reported production captured by On-chain transactions.
+
+        `closing_usd`, The daily closing price of Bitcoin in USD.
+
+        `total_daily_rewards_closing_usd`, Daily total rewards in USD using the closing usd price.
+
+        `accumulated_monthly_rewards_closing_usd`, accumulated monthly rewards in usd using the closing usd price.
+
+        | Name | Miner |
+
+        |--------------|--------------|
+
+        | MARA | `mara` |
+
+        | RIOT | `riot` |
+
+        | CORE | `core` |
+
+        | HIVE | `hive` |
+
+        | CLSK | `clsk` |
+
+        | BITF | `bitf` |
+
+        | CIPHER | `cipher` |
+
+        | WULF | `wulf` |
+
+        | IREN | `iren` |'
+      parameters:
+      - description: A mining company from the table that we support. [See here](#tag/BTC-Miner-Data).
+        explode: false
+        in: query
+        name: miner
+        required: true
+        schema:
+          type: string
+        style: form
+        example: mara
+      - description: Currently we support `day`, `hour`, and `block`.
+        explode: false
+        in: query
+        name: window
+        schema:
+          type: string
+          default: day
+        style: form
+        example: day
+      - description: This defines the starting time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the earliest time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T100000
+      - description: This defines the ending time for which data will be gathered, formatted as YYYYMMDDTHHMMSS (indicating YYYY-MM-DDTHH:MM:SS, UTC time). If window=day is used, it can also be formatted as YYYYMMDD (date). If window=block is used, you can also specify the exact block height (e.g. 510000). If this field is not specified, response will include data from the latest time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          type: string
+        style: form
+        example: 20191001T103025
+      - description: The maximum number of entries to return before the latest data point (or before `to` if specified). This field ranges from 1 to 100,000.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 100000
+        style: form
+        example: 100
+      - description: A format type about return message type. Supported formats are json, csv.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          type: string
+          default: json
+        style: form
+        example: json
+      responses:
+        '200':
+          description: Company Data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - status
+                - result
+                properties:
+                  status:
+                    type: object
+                    description: The status object is return with most of requests and indicates if the request was successful. If it is not successful, error information is included.
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        description: HTTP status code
+                      message:
+                        type: string
+                        description: Text description of the error or success.
+                    required:
+                    - code
+                    - message
+                  result:
+                    type: object
+                    required:
+                    - data
+                    - window
+                    properties:
+                      window:
+                        type: string
+                        description: The size of window. It can be day, hour, or block, and it depends on the user request.
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - block_bytes
+                          - coinbase_rewards
+                          - other_mining_rewards
+                          - total_rewards
+                          - accumulated_monthly_rewards
+                          - unique_txn
+                          - active_address_count
+                          - reported_production
+                          - report_accuracy
+                          - closing_usd
+                          - total_daily_rewards_closing_usd
+                          - accumulated_monthly_rewards_closing_usd
+                          properties:
+                            date:
+                              type: string
+                              description: The date in YYYY-DD-MM. This optional field only appears when window=day is used.
+                            coinbase_rewards:
+                              type: number
+                              description: The daily amount of Bitcoin mined directly from a coinbase transaction.
+                            other_mining_rewards:
+                              type: number
+                              description: The daily amount of Bitcoin received as payment from a mining pool. Tipically, mining pools pay miners with Bitcoin from a coinbase transaction.
+                            total_rewards:
+                              type: number
+                              description: The daily sum of coinbase_rewards and Other Mining Rewards (in number of Bitcoin).
+                            accumulated_monthly_rewards:
+                              type: number
+                              description: The daily running sum of total_rewards in each month (in number of Bitcoin).
+                            unique_txn:
+                              type: number
+                              description: The total number of Bitcoin transactions involving a mining reward.
+                            active_address_count:
+                              type: number
+                              description: The number of addresses from a company that received a block reward each day.
+                            reported_production:
+                              type: number
+                              description: The company's reported total monthly production (in number of Bitcoin).
+                            report_accuracy:
+                              type: number
+                              description: The ratio of accumulated_monthly_rewards to reported_production times 100. It represents the % of total reported production captured by On-chain transactions.
+                            closing_usd:
+                              type: number
+                              description: The daily closing price of Bitcoin in USD.
+                            total_daily_rewards_closing_usd:
+                              type: number
+                              description: Daily total_rewards in USD using the closing_usd price.
+                            accumulated_monthly_rewards_closing_usd:
+                              type: number
+                              description: accumulated_monthly_rewards in USD using the closing_usd price.
+              example:
+                status:
+                  code: 200
+                  message: success
+                result:
+                  window: day
+                  data:
+                  - date: '2026-06-14'
+                    coinbase_rewards: 37.73277462
+                    other_mining_rewards: 1.55200496
+                    total_rewards: 39.28477958
+                    accumulated_monthly_rewards: 362.81675982
+                    unique_txn: 14
+                    active_address_count: 6
+                    reported_production: null
+                    report_accuracy: null
+                    closing_usd: 65720.78
+                    total_daily_rewards_closing_usd: 2581826.3
+                    accumulated_monthly_rewards_closing_usd: 23667976.77
+                  - date: '2026-06-13'
+                    coinbase_rewards: 22.26597463
+                    other_mining_rewards: 1.55256467
+                    total_rewards: 23.8185393
+                    accumulated_monthly_rewards: 323.53198024
+                    unique_txn: 11
+                    active_address_count: 6
+                    reported_production: null
+                    report_accuracy: null
+                    closing_usd: 64587.31
+                    total_daily_rewards_closing_usd: 1538375.43
+                    accumulated_monthly_rewards_closing_usd: 21086150.48
+      security:
+      - AccessToken: []
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For each API request, include this HTTP header:
+
+        `Authorization` with the `Bearer <YOUR_API_KEY>`. Bearer access token is the type of HTTP Authorization.  You have to include access token to the HTTP header and note that leading bearer is required.
+
+        You must include your access token in HTTP header in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.'
+    QueryParameter:
+      type: apiKey
+      name: api_key
+      in: query
+      description: 'For each API reqeust, include `api_key` parameter.
+
+        You must request with your access token in query parameter in every request you make. The token is unique, issued for each client, and regularly changed(once a year). To obtain an access token, please [upgrade your plan](https://cryptoquant.com/pricing) to Professional or Premium plan. You''ll be able to see your access token on the [API tab](https://cryptoquant.com/settings/api) of your profile page after the subscription.
+
+        If you are using Excel, you can use the `api_key` parameter to request with your access token to return data either in `json` or `csv`.'
+x-tagGroups:
+- name: Discovery
+  tags:
+  - Available Endpoints
+  - Supported Stablecoin List
+  - Supported ERC20 List
+  - Supported Alt List
+- name: Bitcoin
+  tags:
+  - BTC Entity Status
+  - BTC Exchange Flows
+  - BTC Flow Indicator
+  - BTC Market Indicator
+  - BTC Network Indicator
+  - BTC Miner Flows
+  - BTC Inter Entity Flows
+  - BTC Fund Data
+  - BTC Market Data
+  - BTC Miner Data
+  - BTC Network Data
+  - BTC Mempool Statistics
+  - BTC Lightning Statistics
+- name: Ethereum
+  tags:
+  - ETH Entity Status
+  - ETH Exchange Flows
+  - ETH Flow Indicator
+  - ETH Market Indicator
+  - ETH 2.0
+  - ETH Fund Data
+  - ETH Market Data
+  - ETH Network Data
+- name: XRP
+  tags:
+  - XRP Entity Status
+  - XRP Entity Flows
+  - XRP Flow Indicator
+  - XRP Market Data
+  - XRP Network Data
+  - XRP Network Indicator
+  - XRP Dex Data
+  - XRP AMM Data
+- name: TRX
+  tags:
+  - TRX Market Data
+  - TRX Network Data
+  - TRX DEFI
+- name: Stablecoin
+  tags:
+  - Stablecoin Entity Status
+  - Stablecoin Exchange Flows
+  - Stablecoin Flow Indicator
+  - Stablecoin Market Data
+  - Stablecoin Network Data
+- name: ERC20
+  tags:
+  - ERC20 Entity Status
+  - ERC20 Exchange Flows
+  - ERC20 Flow Indicator
+  - ERC20 Market Data
+  - ERC20 Network Data
+- name: Alt
+  tags:
+  - Alt Market Data
+- name: Utilities
+  tags:
+  - Latency
