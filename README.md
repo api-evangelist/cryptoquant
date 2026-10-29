@@ -1,4 +1,4 @@
-# CryptoQuant (cryptoquant)
+# CryptoQuant
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,67 +66,148 @@
 
 CryptoQuant is a blockchain data analytics platform providing real-time and historical on-chain, exchange flow, miner, derivatives, and stablecoin metrics for Bitcoin, Ethereum, and other major cryptocurrencies. The API delivers time-series data used by traders, funds, and researchers to gauge market sentiment and capital flows.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/cryptoquant/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/cryptoquant/refs/heads/main/apis.yml)
+**Areas:** Blockchain · Cryptocurrency · On-Chain Analytics · Market Data · Derivatives
 
-## Scope
+## CryptoQuant on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for CryptoQuant is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cryptoquant/](https://apis.io/providers/cryptoquant/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Blockchain
-- Cryptocurrency
-- On-Chain Analytics
-- Market Data
-- Derivatives
+- [CryptoQuant Exchange Flows API](https://apis.io/apis/cryptoquant/cryptoquant-exchange-flows-api/) — Inflow, outflow, and reserve metrics for major exchanges.
+- [CryptoQuant Market Data API](https://apis.io/apis/cryptoquant/cryptoquant-market-data-api/) — Price, open interest, and derivatives metrics.
+- [CryptoQuant Miner API](https://apis.io/apis/cryptoquant/cryptoquant-miner-api/) — Miner reserve, position index, and outflow metrics.
+- [CryptoQuant On-Chain API](https://apis.io/apis/cryptoquant/cryptoquant-on-chain-api/) — Network indicators including SOPR, MVRV, NVT, and active addresses.
+- [CryptoQuant Stablecoins API](https://apis.io/apis/cryptoquant/cryptoquant-stablecoins-api/) — Stablecoin supply ratio and exchange metrics.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-02-12
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### CryptoQuant API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-The CryptoQuant API exposes on-chain, exchange flow, market, miner, and stablecoin metrics for major cryptocurrencies via a versioned REST interface. Authentication uses an API key passed as a bearer token.
+- [Cryptoquant Agentic Access](https://apis.io/agentic-access/cryptoquant/cryptoquant-agentic-access/)
 
-- **Human URL:** [https://cryptoquant.com/docs](https://cryptoquant.com/docs)
-- **Base URL:** `https://api.cryptoquant.com/v1`
+#### JSON Schema (1)
 
-#### Tags
+The data models the API reads and writes.
 
-- On-Chain Analytics
-- Exchange Flows
-- Miner Flows
-- Market Data
-- Stablecoins
+- [CryptoQuantTimeSeriesResponse](https://apis.io/schemas/cryptoquant/cryptoquant-timeseries/)
 
-#### Properties
+#### JSON-LD (1)
 
-- [Documentation](https://cryptoquant.com/docs)
-- [Pricing](https://cryptoquant.com/products/api)
-- [OpenAPI](openapi/cryptoquant-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cryptoquant.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cryptoquant.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [JSON Schema](json-schema/cryptoquant-timeseries-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [J S O N L D Context](json-ld/cryptoquant-context.jsonld)
+Linked-data contexts for the provider's vocabulary.
 
-## Common Properties
+- [Cryptoquant Context](https://apis.io/jsonld/cryptoquant/cryptoquant-context/)
 
-- [LinkedIn](https://www.linkedin.com/company/crypto-quant)
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [CryptoQuant Vocabulary](https://apis.io/vocabularies/cryptoquant/cryptoquant-vocabulary/)
+
+#### Collections (6)
+
+Postman and Open Collection request collections.
+
+- [CryptoQuant API](https://apis.io/collections/cryptoquant/open-cryptoquant/)
+- [CryptoQuant Exchange Flows API](https://apis.io/collections/cryptoquant/open-cryptoquant-exchange-flows-api/)
+- [CryptoQuant Exchange Flows Market Data API](https://apis.io/collections/cryptoquant/open-cryptoquant-market-data-api/)
+- [CryptoQuant Exchange Flows Miner API](https://apis.io/collections/cryptoquant/open-cryptoquant-miner-api/)
+- [CryptoQuant Exchange Flows On-Chain API](https://apis.io/collections/cryptoquant/open-cryptoquant-on-chain-api/)
+- [CryptoQuant Exchange Flows Stablecoins API](https://apis.io/collections/cryptoquant/open-cryptoquant-stablecoins-api/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [CryptoQuant — jsonschema rules](https://apis.io/rules/cryptoquant/cryptoquant-jsonschema-spectral-rules/)
+- [CryptoQuant API Rules](https://apis.io/rules/cryptoquant/cryptoquant-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Cryptoquant Authentication](https://apis.io/security/cryptoquant/cryptoquant-authentication/)
+- [Cryptoquant Domain Security](https://apis.io/security/cryptoquant/cryptoquant-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Cryptoquant Plans Pricing](https://apis.io/plans/cryptoquant/cryptoquant-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Cryptoquant Rate Limits](https://apis.io/rate-limits/cryptoquant/cryptoquant-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Cryptoquant Finops](https://apis.io/finops/cryptoquant/cryptoquant-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://cryptoquant.com/)
 - [Documentation](https://cryptoquant.com/docs)
 - [Pricing](https://cryptoquant.com/products/api)
-- [OpenAPI](openapi/cryptoquant-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [JSON Schema](json-schema/cryptoquant-timeseries-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [J S O N L D Context](json-ld/cryptoquant-context.jsonld)
-- [Spectral Rules](rules/cryptoquant-rules.yml)
-- [Vocabulary](vocabulary/cryptoquant-vocabulary.yml)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 30.4** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 53.9 |
+| Contract governance | 27.3 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 21.4 |
+| Access clarity | 7.9 |
+
+**Agent readiness 20.7** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 21.3** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cryptoquant/](https://apis.io/providers/cryptoquant/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for CryptoQuant: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cryptoquant/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
